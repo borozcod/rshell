@@ -30,7 +30,7 @@ For this assignment we will be using a Composite Design Pattern. We will have a 
 # Classes
 
 
-## `Connectos` Class
+## `Connectors` Class
 This is the class that will handle if a command should run or not. It will hold a `status` integer that is either 0 or 1, a `run` boolean and a queue of connectors that are added with `add_connector` represented by either `1` for `&&` or `0` for `||`. The `set_status` function will take an `int` that is either `1` for pass or `0` for fail, then compare that with the bottom of the queue with an `&&` bitwise operation. If the result is `1` we set `run` to `true` else set it to `false`.
 
 ## Class Group  
