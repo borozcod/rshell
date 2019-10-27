@@ -25,7 +25,7 @@ For this assignment we will be using a Composite Design Pattern. We will have a 
 
 # Diagram
 ## UML
-![Image of Yaktocat](images/UML.jpeg)
+![Image of UML](images/UML.jpeg)
 
 # Classes
 
