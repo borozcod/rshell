@@ -25,7 +25,7 @@ For this assignment we will be using a Composite Design Pattern. We will have a 
 
 # Diagram
 ## UML
-![Image of UML](images/UML.jpeg)
+![Image of UML](https://github.com/cs100/assignment-lakersboyz/blob/borozcod/readme/images/UML.jpeg?raw=true)
 
 # Classes
 
