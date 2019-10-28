@@ -1,3 +1,3 @@
 #!/bin/sh
 
-./sCalls "ls -a";
+./systemCalls

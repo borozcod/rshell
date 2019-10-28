@@ -12,10 +12,11 @@ using namespace std;
 
 int main(int argv, char** argc)
 {
-  string tester = argc[1];
+  string tester = "ls -a";
   vector<string> s;
   int counter = 1;
   int status;
+  
 
   char* args[50];
 
@@ -50,29 +51,32 @@ int main(int argv, char** argc)
 
 
 // CHILD PROCESS
+
+
   if (child == 0)
   {
+ 
+cout << "CHILD PROCESS: " << child << endl;
 
-          if ( execvp (args[0], args) == -1)
+ if ( execvp (args[0], args) == -1)
           {
               perror ("exec");
           }
 }
 
 // PARENT PROCESS
-  if (child > 0)
+ if (child > 0)
   {
 
+   check =  waitpid(child, &status, WNOHANG);
 
+if (check == 0)
+{
 
-    check = waitpid(child, &status, WNOHANG);
-
-  if (check == 0)
-    {
-    tester = "cal";
+   tester = "cal";
     s.clear();
     counter = 1;
-
+    
     for (int i = 0; i < tester.size(); i++)
     {
         if (tester.at(i) == ' ')
@@ -88,9 +92,7 @@ int main(int argv, char** argc)
             s.push_back(tester);
             break;
         }
-
-    }
-
+}
     cout << endl << endl;
 
     for (int i = 0; i < counter; i++)
@@ -99,13 +101,13 @@ int main(int argv, char** argc)
     }
     args[counter] = NULL;
 
+cout << "PARENT PROCESS: " << child << endl;
+
     if ( execvp (args[0], args) == -1)
     {
         perror ("exec");
     }
-
 }
-
 
   }
 
