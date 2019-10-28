@@ -48,6 +48,10 @@ This class will have two private members. A vector of `Command`s and a reference
 
 # Prototypes/Research
 
+For our RSHELL we will be using three system calls, fork(), execvp(), and waitpid(). Each one of them have their own unique actions, the fork() system call creates two copies of the process being executed. The processes are the child process and the parent process. The moment when you call fork() is when it splits up, and you can run the same program twice at the same time. Depending on what commands are entered and what connectors are found, we can run two different processes at the same time. However, if we want one process to finish before we start the next one, we can use the system call wait(). Otherwise, if we don’t want to wait and just run the processes at the same time, then we should use the waitpid() system call. It takes in three arguments, which will give us the status information of the terminating process. Then depending on what the return value is, the process can run at the same time. Lastly, the execvp() system call is what is going to enable us to perform the commands that are entered in the input. For example, if the user types in “ls”, the execvp() call will display all the directories.
+
+The parsing function that we are going to be using is one where whatever the user inputs will be stored into a string variable. Once the input is in the string variable, then we will run a while loop where it checks for any connectors in the input. Whenever it finds a connector it separates and inserts every word before the connector into a string vector, except the connector, that will be inserted into a queue. When we execute the commands it will grab the first two element from the vector and the connector from the queue. Depending on what the commands are and what the particularly connector is, the appropriate execution will be performed. Also, depending on how many commands were entered and how many connectors were found, the order in which they execute may change. Another thing that might change the execution order will be if any parenthesis or quotation marks are found.
+
 # Development and Testing Roadmap
 
 ## Create Test
