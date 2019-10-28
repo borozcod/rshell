@@ -52,6 +52,10 @@ For our RSHELL we will be using three system calls, fork(), execvp(), and waitpi
 
 The parsing function that we are going to be using is one where whatever the user inputs will be stored into a string variable. Once the input is in the string variable, then we will run a while loop where it checks for any connectors in the input. Whenever it finds a connector it separates and inserts every word before the connector into a string vector, except the connector, that will be inserted into a queue. When we execute the commands it will grab the first two element from the vector and the connector from the queue. Depending on what the commands are and what the particularly connector is, the appropriate execution will be performed. Also, depending on how many commands were entered and how many connectors were found, the order in which they execute may change. Another thing that might change the execution order will be if any parenthesis or quotation marks are found.
 
+To run parsing function, you must compile parsingInput.cpp in terminal then run it.
+To run the system calls function, you must compile systemC.cpp in terminal then run it.
+To test out these function you can run the shell scripts "testParsing.sh" & "systemCallTest.sh".
+
 # Development and Testing Roadmap
 
 ## Create Test
