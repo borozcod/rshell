@@ -7,12 +7,40 @@
 class Parser {
         private:
 	    std::queue<int> connectors;
+	    
+	    void parse_string( std::string &enter, int &counter, std::queue<int> &connectors ) {
+		if (enter.at(counter) == '&' && enter.at(counter + 1) == '&')
+		{
+		    // Check for &&
+		    enter.erase(0, counter + 3);
+		    counter = 0;
+		    connectors.push(1);
+
+		}
+		else if (enter.at(counter) == '|' && enter.at(counter + 1) == '|')
+		{
+		    // Check for ||
+		    enter.erase(0, counter + 3);
+		    counter = 0;
+
+		    connectors.push(0);
+
+		}
+		else
+		{
+		    counter++;
+		}
+	    }
 
         public:
             Parser(std::string command) {
-		this->connectors.push(1);
-		this->connectors.push(1);
-		this->connectors.push(0);			    
+		
+		int counter = 0;
+
+		while (counter < command.size())
+		{
+		    this->parse_string(command, counter, connectors);
+		}
             }
 	    
 	    int get_front() {
