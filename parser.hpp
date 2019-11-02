@@ -54,6 +54,10 @@ class Parser {
 	    int get_size() {
 	    	return connectors.size();
 	    }
+	    
+	    void pop() {
+	    	this->connectors.pop();
+	    }
 
 };
 
