@@ -4,7 +4,7 @@
 #include "gtest/gtest.h"
 
 #include <string>
-#include "parser.hpp"
+#include "../parser.hpp"
 
 TEST(ParserTest, ParseConnectors ) {
 
