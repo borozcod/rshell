@@ -31,6 +31,20 @@ class Parser {
 		    counter++;
 		}
 	    }
+	    
+	    void parse_string_commands(std::string &enter, int &counter, std::vector<std::string> &list) {
+		if (enter.at(counter) == ';')
+		{
+		    list.push_back(enter.substr(0, counter));
+
+		    enter.erase(0, counter + 2);
+		    counter = 0;
+		}
+		else
+		{
+		    counter++;
+		}
+	}
 
         public:
             Parser() {}
@@ -45,7 +59,19 @@ class Parser {
 		}
  
 	    }    
-	
+	    
+	    // Overload for when passing a vector that will hold command gorups
+	    void parse(std::string command_string, std::vector<std::string> &command_g) {
+
+		int counter = 0;
+
+		while (counter < command_string.size())
+		{
+		    this->parse_string_commands(command_string, counter, command_g);
+		}
+		command_g.push_back(command_string);
+	    }
+
 	    int get_front() {
 		return connectors.front();
 	    }

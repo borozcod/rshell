@@ -4,7 +4,7 @@
 #include "gtest/gtest.h"
 
 #include <string>
-#include "../headers/connectors.hpp"
+#include "../header/connectors.hpp"
 
 TEST(ConnectorsTest, CheckCommandsRun ) {
 
