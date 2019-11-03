@@ -14,7 +14,7 @@ class CommandGroup : public Base {
 
         public:
 	    CommandGroup(Connectors &c) {
-		connectors = c;
+		this->connectors = c;
 	    }	
 
 	    void execute() {
