@@ -8,10 +8,11 @@
 
 TEST(ParserTest, ParseConnectors ) {
 
-    std::string command = "echo hi && ls -a && cat main.cpp || echo bye && echo bye again";
-    Parser* parser = new Parser(command);
+    std::string command = "echo hi || ls -a && cat main.cpp || echo bye && echo bye again";
+    Parser* parser = new Parser();
 
-    EXPECT_EQ(parser->get_front(), 1);
+    parser->parse(command);
+    EXPECT_EQ(parser->get_front(), 0);
     EXPECT_EQ(parser->get_back(), 1);
     EXPECT_EQ(parser->get_size(), 4);
     parser->pop();
@@ -21,7 +22,8 @@ TEST(ParserTest, ParseConnectors ) {
 TEST(ParserTest, ParseSingleCommand ) {
 
     std::string command = "echo hi";
-    Parser* parser = new Parser(command);
+    Parser* parser = new Parser();
+    parser->parse(command);
 
     EXPECT_EQ(parser->get_size(), 0);
 }

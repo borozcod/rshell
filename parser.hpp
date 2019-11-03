@@ -33,16 +33,19 @@ class Parser {
 	    }
 
         public:
-            Parser(std::string command) {
-		
+            Parser() {}
+	
+	    void parse(std::string command_string) {
+
 		int counter = 0;
 
-		while (counter < command.size())
+		while (counter < command_string.size())
 		{
-		    this->parse_string(command, counter, connectors);
+		    this->parse_string(command_string, counter, connectors);
 		}
-            }
-	    
+ 
+	    }    
+	
 	    int get_front() {
 		return connectors.front();
 	    }
