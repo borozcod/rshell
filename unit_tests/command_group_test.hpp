@@ -4,9 +4,9 @@
 #include "gtest/gtest.h"
 
 #include <string>
-#include "../base.hpp"
-#include "../command_group.hpp"
-#include "../connectors.hpp"
+#include "../headers/base.hpp"
+#include "../headers/command_group.hpp"
+#include "../headers/connectors.hpp"
 
 TEST(CommandGroupTest, SingleCommandGroup) {
 
