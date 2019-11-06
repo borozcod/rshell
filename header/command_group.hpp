@@ -6,6 +6,7 @@
 #include "command.hpp"
 #include <vector>
 #include <string>
+#include <iostream>
 
 class CommandGroup : public Base {
         private:
@@ -13,8 +14,10 @@ class CommandGroup : public Base {
             Connectors* connectors;
 
         public:
-	    CommandGroup(Connectors &c) {
+	    CommandGroup(Connectors* c, std::string command) {
 		this->connectors = c;
+
+		this->add_command(command);
 	    }	
 
 	    void execute() {
@@ -23,8 +26,7 @@ class CommandGroup : public Base {
 		}
 	    }
 
-	    void add_commands(std::string command_string) {
-	
+	    void add_command(std::string command_string) {
 		// The parser will return a vectror that should just be commands joined by connectors, no ;
 	 	std::vector<std::string> command_g;
 			
@@ -35,24 +37,30 @@ class CommandGroup : public Base {
 		// It could be a vector of just one or more
 		parser->parse(command_string, command_g);
 
+		
 		// If there is more than one command group then send that down to a new command group
 		if(command_g.size() > 1) {
 		
 		    for(unsigned i = 0; i < command_g.size(); i++) {
 			// For the CommandGroup I create new Connectors	
-		    	Connectors* add_connectors = new Connectors():
-		    	Base* add_command_group = new CommandGroup(add_connectors);
+		    	Connectors* add_connectors = new Connectors();
+		    	Base* add_command_group = new CommandGroup(add_connectors, command_g.at(i));
+			//add_command_group->add_command(command_g.at(i));
 		    	this->commands.push_back(add_command_group);
 		    }
    
 		} else {
-		
-		    // For the command I pass the CommandGroup's Connectors
-		    Base* add_command = new Command(this->connectors);
-		    // Ran out of ideas for naming things, sorry haha
-		    add_command->add_command(command_string);
-		    this->commands.push_back(add_command);
 
+		    Parser* individual_parser = new Parser();
+		    individual_parser->parse(command_string);
+
+		    std::vector<std::string> individual_commands = individual_parser->get_individual_commands();
+		    for(unsigned i = 0; i < individual_commands.size(); i++) {
+		    	// For the command I pass the CommandGroup's Connectors
+		    	Base* add_command = new Command(this->connectors, individual_commands.at(i));
+		    	// Ran out of ideas for naming things, sorry haha
+		    	this->commands.push_back(add_command);
+		    }
 		}
 	    }
 

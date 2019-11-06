@@ -10,11 +10,10 @@
 
 TEST(CommandGroupTest, SingleCommandGroup) {
 
-    Base* command_group = new CommandGroup();
-
     std::string command = "echo hi || ls -a && cat main.cpp || echo bye && echo bye again";
 
-    command_group->add_command(command);
+    Connectors* start_connectors = new Connectors();
+    CommandGroup* command_group = new CommandGroup(start_connectors, command);
 
     // Just a simple check to ensure commands are being added to the vector member    
     EXPECT_EQ(command_group->size(), 5);
@@ -22,16 +21,17 @@ TEST(CommandGroupTest, SingleCommandGroup) {
 
 TEST(CommandGroupTest, MultipleCommandsGroup) {
 
-    Base* command_group = new CommandGroup();
 
-    // The difference here is that we add a ;
+    //The difference here is that we add a ;
     // This should actually add everything after the ; as a CommandGroup and therefor reducing the size of the vector to 3
     std::string command = "echo hi || ls -a && cat main.cpp ; echo bye && echo bye again";
 
-    command_group->add_command(command);
+    Connectors* c = new Connectors();
+    CommandGroup* command_group = new CommandGroup(c, command);
+
 
     // Just a simple check to ensure commands are being added to the vector member    
-    EXPECT_EQ(command_group->size(), 3);
+    EXPECT_EQ(command_group->size(), 2);
 }
 
 

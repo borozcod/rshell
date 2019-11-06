@@ -7,11 +7,13 @@
 class Parser {
         private:
 	    std::queue<int> connectors;
-	    
+	    std::vector<std::string> single_command_list;
+
 	    void parse_string( std::string &enter, int &counter, std::queue<int> &connectors ) {
 		if (enter.at(counter) == '&' && enter.at(counter + 1) == '&')
 		{
 		    // Check for &&
+		    this->single_command_list.push_back(enter.substr(0, counter -1));
 		    enter.erase(0, counter + 3);
 		    counter = 0;
 		    connectors.push(1);
@@ -20,6 +22,7 @@ class Parser {
 		else if (enter.at(counter) == '|' && enter.at(counter + 1) == '|')
 		{
 		    // Check for ||
+                    this->single_command_list.push_back(enter.substr(0, counter -1));
 		    enter.erase(0, counter + 3);
 		    counter = 0;
 
@@ -57,6 +60,7 @@ class Parser {
 		{
 		    this->parse_string(command_string, counter, connectors);
 		}
+		single_command_list.push_back(command_string);
  
 	    }    
 	    
@@ -88,6 +92,9 @@ class Parser {
 	    	this->connectors.pop();
 	    }
 
+	    std::vector<std::string> get_individual_commands() {
+		return this->single_command_list;
+	    }
 };
 
 #endif // _PARSER_HPP_

@@ -18,6 +18,12 @@ TEST(ParserTest, ParseConnectors ) {
     EXPECT_EQ(parser->get_size(), 4);
     parser->pop();
     EXPECT_EQ(parser->get_size(), 3);
+	
+    std::vector<std::string> test_commands = parser->get_individual_commands();
+    
+    EXPECT_EQ(test_commands.at(4), "echo bye again");
+
+
 }
 
 TEST(ParserTest, ParseSingleCommand ) {
