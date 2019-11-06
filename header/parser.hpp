@@ -38,7 +38,7 @@ class Parser {
 	    void parse_string_commands(std::string &enter, int &counter, std::vector<std::string> &list) {
 		if (enter.at(counter) == ';')
 		{
-		    list.push_back(enter.substr(0, counter));
+		    list.push_back(enter.substr(0, counter -1));
 
 		    enter.erase(0, counter + 2);
 		    counter = 0;

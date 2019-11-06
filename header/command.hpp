@@ -16,6 +16,8 @@ class Command : public Base {
     
     std::string	command_string;
     Connectors* connectors;	
+    std::vector<std::string> execs;
+    int counter = 1;
 
     public:
         Command(Connectors* c, std::string command) { 
@@ -28,36 +30,39 @@ class Command : public Base {
 	}
 	
         void execute() {
-	 std::cout << this->command_string << std::endl;
-	std::vector<std::string> execs;
-	int counter = 1;
-	
+       // std::cout << this->command_string << std::endl;
 
 
-  for (int i = 0; i < command_string.size(); i++)
+//	std::vector<std::string> execs;
+//	int counter = 1;
+//	execs.clear();
+
+	char* args[50];
+
+
+
+  for (int i = 0; i < this->command_string.size(); i++)
   {
-      if (command_string.at(i) == ' ')
+      if (this->command_string.at(i) == ' ')
       {
-          execs.push_back(command_string.substr(0,i));
+          execs.push_back(this->command_string.substr(0,i));
 
-          command_string.erase(0,i +1);
+          this->command_string.erase(0,i +1);
           i = 0;
           counter++;
       }
-      else if (i == (command_string.size() -1))
+      else if (i == (this->command_string.size() -1))
       {
-          execs.push_back(command_string);
+          execs.push_back(this->command_string);
       }
 
   }
-       
 
+pid_t child = fork();
 
-//	
+	if (child == 0)
+	{
 
-		    
-	char* args[50];
-	
 	  for (int i = 0; i < counter; i++)
   	{
      		 args[i] = (char*)(execs.at(i).c_str());
@@ -69,10 +74,16 @@ class Command : public Base {
               perror ("exec");
           }
 
-	execs.clear();
-	counter = 1;
+}
+else if (child > 0)
+{
+wait(0);
 
-		 // This is where the magic happens. I don't know how
+}
+	
+
+
+ // This is where the magic happens. I don't know how
 	    //if(this->connectors->get_run()) {
 	    	// here we should call this->connectors->set_status() to 1 if it passed or 0 if failed;
 	    //} else {
