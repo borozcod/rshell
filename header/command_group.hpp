@@ -16,6 +16,7 @@ class CommandGroup : public Base {
         public:
 	    CommandGroup(Connectors* c, std::string command) {
 		this->connectors = c;
+		this->connectors->add_connectors(command);
 
 		this->add_command(command);
 	    }	
