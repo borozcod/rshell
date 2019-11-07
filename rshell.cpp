@@ -6,7 +6,7 @@
 
 int main() {
  
-   std::string command = "echo hi || ls -a && cat main.cpp ; echo bye && echo bye again";
+   std::string command = "echo hello";
 
     Connectors* start_connectors = new Connectors();
     CommandGroup* command_group = new CommandGroup(start_connectors, command);

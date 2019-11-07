@@ -29,6 +29,21 @@ class Parser {
 		    connectors.push(0);
 
 		}
+		else if (enter.at(counter) == '#')
+		{
+		if(counter != 0)
+		{
+		this->single_command_list.push_back(enter.substr(0,counter-1));
+		enter.erase(0,counter);
+		counter = 0;
+		}
+		else
+		{
+		enter.erase(0,enter.size());
+		counter = 0;
+		connectors.push(0);
+		}
+		}
 		else
 		{
 		    counter++;
@@ -38,7 +53,7 @@ class Parser {
 	    void parse_string_commands(std::string &enter, int &counter, std::vector<std::string> &list) {
 		if (enter.at(counter) == ';')
 		{
-		    list.push_back(enter.substr(0, counter));
+		    list.push_back(enter.substr(0, counter -1));
 
 		    enter.erase(0, counter + 2);
 		    counter = 0;
@@ -60,8 +75,10 @@ class Parser {
 		{
 		    this->parse_string(command_string, counter, connectors);
 		}
+		if (!command_string.empty()) // so it doesn't add a blank string
+		{
 		single_command_list.push_back(command_string);
- 
+ 		}
 	    }    
 	    
 	    // Overload for when passing a vector that will hold command gorups
