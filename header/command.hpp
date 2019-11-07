@@ -30,87 +30,62 @@ class Command : public Base {
 	}
 	
         void execute() {
-       // std::cout << this->command_string << std::endl;
 
-int status;
-//	std::vector<std::string> execs;
-//	int counter = 1;
-//	execs.clear();
+	    int status;
+	    char* args[50];
 
-	char* args[50];
+  	    for (int i = 0; i < this->command_string.size(); i++)
+  	    {
+      		if (this->command_string.at(i) == ' ')
+      		{
+          	    execs.push_back(this->command_string.substr(0,i));
 
+          	    this->command_string.erase(0,i +1);
+          	    i = 0;
+          	    counter++;
+      		}
+     		else if (i == (this->command_string.size() -1))
+      	    	{
+          	    execs.push_back(this->command_string);
+      	    	}
 
+  	    }
 
-  for (int i = 0; i < this->command_string.size(); i++)
-  {
-      if (this->command_string.at(i) == ' ')
-      {
-          execs.push_back(this->command_string.substr(0,i));
+	    pid_t child = fork();
+	    pid_t child2;
 
-          this->command_string.erase(0,i +1);
-          i = 0;
-          counter++;
-      }
-      else if (i == (this->command_string.size() -1))
-      {
-          execs.push_back(this->command_string);
-      }
-
-  }
-
-pid_t child = fork();
-pid_t child2;
-
-
-	if (child == 0)
-	{
+            if (child == 0)
+	    {
 	
-	if (this->connectors->get_run())
-{
-//std::cout << "RUNNING" << std::endl;
-	  for (int i = 0; i < counter; i++)
-  	{
-     		 args[i] = (char*)(execs.at(i).c_str());
- 	 }
- 	 args[counter] = NULL;	
+	    	if (this->connectors->get_run())
+	    	{
+	  	    for (int i = 0; i < counter; i++)
+  		    {
+     		    args[i] = (char*)(execs.at(i).c_str());
+ 	 	    }
+ 	 	    args[counter] = NULL;	
 
-	 if ( execvp (args[0], args) == -1)
-          {
-              perror ("exec");
-          }
+	    	    if ( execvp (args[0], args) == -1)
+            	    {
+              	    	perror ("exec");
+	    	    }
 
-}
-else
-{
-//std::cout << "EXIT" << std::endl;
-exit(1);
-}
+	        } 
+	        else
+	        {
+	     	    exit(1);
+	        }
 
-}
+	    }
+	    else if (child > 0)
+	    {
+		child2 = waitpid(child, &status, 0);
+		if (child2 == child)
+		{
+		    this->connectors->set_status(this->connectors->get_status());
+		}
 
-
-else if (child > 0)
-{
- child2 = waitpid(child, &status, 0);
-if (child2 == child)
-{
-this->connectors->set_status(this->connectors->get_status());
-}
-
-
-
-//
-//
-}
-	
-
-
- // This is where the magic happens. I don't know how
-	    //if(this->connectors->get_run()) {
-	    	// here we should call this->connectors->set_status() to 1 if it passed or 0 if failed;
-	    //} else {
-	    //	this->connectors->set_status(this->connectors->get_status());
-	    //}
+	    }
 	}
 	
 	int size() {

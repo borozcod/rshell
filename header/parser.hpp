@@ -31,18 +31,19 @@ class Parser {
 		}
 		else if (enter.at(counter) == '#')
 		{
-		if(counter != 0)
-		{
-		this->single_command_list.push_back(enter.substr(0,counter-1));
-		enter.erase(0,counter);
-		counter = 0;
-		}
-		else
-		{
-		enter.erase(0,enter.size());
-		counter = 0;
-		connectors.push(0);
-		}
+		    // Check for #
+		    if(counter != 0)
+		    {
+			this->single_command_list.push_back(enter.substr(0,counter-1));
+			enter.erase(0,counter);
+			counter = 0;
+		    }
+		    else
+		    {
+			enter.erase(0,enter.size());
+			counter = 0;
+			connectors.push(0);
+		    }
 		}
 		else
 		{
@@ -77,7 +78,7 @@ class Parser {
 		}
 		if (!command_string.empty()) // so it doesn't add a blank string
 		{
-		single_command_list.push_back(command_string);
+		    single_command_list.push_back(command_string);
  		}
 	    }    
 	    
