@@ -1,5 +1,4 @@
 #!/bin/sh
 
-COMMAND="echo hello"
+../rshell "echo hello"
 
-../rshell $COMMAND
