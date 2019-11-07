@@ -32,7 +32,7 @@ class Command : public Base {
         void execute() {
        // std::cout << this->command_string << std::endl;
 
-
+int status;
 //	std::vector<std::string> execs;
 //	int counter = 1;
 //	execs.clear();
@@ -59,10 +59,15 @@ class Command : public Base {
   }
 
 pid_t child = fork();
+pid_t child2;
+
 
 	if (child == 0)
 	{
-
+	
+	if (this->connectors->get_run())
+{
+//std::cout << "RUNNING" << std::endl;
 	  for (int i = 0; i < counter; i++)
   	{
      		 args[i] = (char*)(execs.at(i).c_str());
@@ -75,10 +80,27 @@ pid_t child = fork();
           }
 
 }
+else
+{
+//std::cout << "EXIT" << std::endl;
+exit(1);
+}
+
+}
+
+
 else if (child > 0)
 {
-wait(0);
+ child2 = waitpid(child, &status, 0);
+if (child2 == child)
+{
+this->connectors->set_status(this->connectors->get_status());
+}
 
+
+
+//
+//
 }
 	
 
