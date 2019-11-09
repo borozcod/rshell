@@ -12,6 +12,7 @@
 #include <sys/wait.h>
 #include <stdio.h>
 
+
 class Command : public Base {
     
     std::string	command_string;
@@ -51,16 +52,17 @@ class Command : public Base {
 
   	    }
 
+
 	    pid_t child = fork();
 	    pid_t child2;
 
             if (child == 0)
 	    {
-	
+//	std::cout << "CHILD\n";
 	    	if (this->connectors->get_run())
 	    	{
 	  	    for (int i = 0; i < counter; i++)
-  		    {
+  	    	    {
      		    args[i] = (char*)(execs.at(i).c_str());
  	 	    }
  	 	    args[counter] = NULL;	
@@ -68,25 +70,58 @@ class Command : public Base {
 	    	    if ( execvp (args[0], args) == -1)
             	    {
               	    	perror ("exec");
+			this->connectors->set_status(0);
+			
+			exit(2);
+				
 	    	    }
-
+		
 	        } 
-	        else
-	        {
-	     	    exit(1);
-	        }
+	       else
+	      {
+	//	std::cout << "EXIT\n";
+	       //this->connectors->set_status(0);
+               exit(1);	  
+	       }
 
 	    }
 	    else if (child > 0)
 	    {
+		
 		child2 = waitpid(child, &status, 0);
-		if (child2 == child)
-		{
-		    this->connectors->set_status(this->connectors->get_status());
-		}
+		
+		//wait(&status);
 
-	    }
-	}
+		if (WEXITSTATUS(status) == 2)
+	{
+	// std::cout << "exit\n";
+	 this->connectors->set_status(0);
+	 }
+	else 
+	{
+	// std::cout << "PARENT\n";
+	 this->connectors->set_status(this->connectors->get_status());
+	 }
+
+	//std::cout << WIFEXITED(status) << std::endl;
+	//std::cout << WEXITSTATUS(status) << std::endl;
+
+/*
+		if (WIFEXITED(status) != 2)
+		{	
+		      std::cout << "PARENT\n";
+		
+		       this->connectors->set_status(this->connectors->get_status());
+		 
+		}
+		else// if (child2 < 0)
+		{ std::cout << "ERROR EXECVP\n"; this->connectors->set_status(0);}
+
+	   */
+
+}
+
+}	
 	
 	int size() {
 	    return 1;
