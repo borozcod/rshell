@@ -90,7 +90,6 @@ class Command : public Base {
 		
 		child2 = waitpid(child, &status, 0);
 		
-		//wait(&status);
 
 		if (WEXITSTATUS(status) == 2)
 	{
