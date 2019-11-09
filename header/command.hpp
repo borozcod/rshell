@@ -58,7 +58,7 @@ class Command : public Base {
 
             if (child == 0)
 	    {
-//	std::cout << "CHILD\n";
+
 	    	if (this->connectors->get_run())
 	    	{
 	  	    for (int i = 0; i < counter; i++)
@@ -79,8 +79,7 @@ class Command : public Base {
 	        } 
 	       else
 	      {
-	//	std::cout << "EXIT\n";
-	       //this->connectors->set_status(0);
+	
                exit(1);	  
 	       }
 
@@ -93,30 +92,14 @@ class Command : public Base {
 
 		if (WEXITSTATUS(status) == 2)
 	{
-	// std::cout << "exit\n";
+
 	 this->connectors->set_status(0);
 	 }
 	else 
 	{
-	// std::cout << "PARENT\n";
+	
 	 this->connectors->set_status(this->connectors->get_status());
 	 }
-
-	//std::cout << WIFEXITED(status) << std::endl;
-	//std::cout << WEXITSTATUS(status) << std::endl;
-
-/*
-		if (WIFEXITED(status) != 2)
-		{	
-		      std::cout << "PARENT\n";
-		
-		       this->connectors->set_status(this->connectors->get_status());
-		 
-		}
-		else// if (child2 < 0)
-		{ std::cout << "ERROR EXECVP\n"; this->connectors->set_status(0);}
-
-	   */
 
 }
 
