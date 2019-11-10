@@ -6,8 +6,8 @@
 
 int main(int argv, char** argc) {
  
-   std::string command = argc[1];
-
+    std::string command = argc[1];
+    //std::string command = "ech multiple || ls -a";
     Connectors* start_connectors = new Connectors();
     CommandGroup* command_group = new CommandGroup(start_connectors, command);
     command_group->execute();
