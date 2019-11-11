@@ -1,3 +1,4 @@
 #!/bin/sh
 
-../rshell "echo multiple || ls -a ; git status && echo bye"
+BASEDIR=$(dirname $0)
+$BASEDIR/../rshell "echo multiple || ls -a ; cat some_file.txt && echo bye"

@@ -1,3 +1,4 @@
 #!/bin/sh
 
-../rshell "exit"
+BASEDIR=$(dirname $0)
+$BASEDIR/../rshell  "exit"

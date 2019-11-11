@@ -1,3 +1,4 @@
 #!/bin/sh
 
-../rshell "echo comment #ls"
+BASEDIR=$(dirname $0)
+$BASEDIR/../rshell "echo comment #ls"

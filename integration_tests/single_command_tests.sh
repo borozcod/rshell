@@ -1,4 +1,5 @@
 #!/bin/sh
 
-../rshell "echo hello"
+BASEDIR=$(dirname $0)
+$BASEDIR/../rshell  "echo hello"
 
