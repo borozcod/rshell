@@ -7,7 +7,7 @@ clear
 
 echo "COMMAND TO RUN: ${COMMAND}"
 
-printf "\nFROM RECULAR EXECUTION\n\n"
+printf "\nFROM REGULAR EXECUTION\n\n"
 eval $COMMAND &> $BASEDIR/output_multiple_commands.txt
 
 cat $BASEDIR/output_multiple_commands.txt
