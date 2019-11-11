@@ -12,6 +12,7 @@
 #include <sys/wait.h>
 #include <stdio.h>
 
+
 class Command : public Base {
     
     std::string	command_string;
@@ -51,16 +52,17 @@ class Command : public Base {
 
   	    }
 
+
 	    pid_t child = fork();
 	    pid_t child2;
 
             if (child == 0)
 	    {
-	
+
 	    	if (this->connectors->get_run())
 	    	{
 	  	    for (int i = 0; i < counter; i++)
-  		    {
+  	    	    {
      		    args[i] = (char*)(execs.at(i).c_str());
  	 	    }
  	 	    args[counter] = NULL;	
@@ -68,25 +70,40 @@ class Command : public Base {
 	    	    if ( execvp (args[0], args) == -1)
             	    {
               	    	perror ("exec");
+			this->connectors->set_status(0);
+			
+			exit(2);
+				
 	    	    }
-
+		
 	        } 
-	        else
-	        {
-	     	    exit(1);
-	        }
+	       else
+	      {
+	
+               exit(1);	  
+	       }
 
 	    }
 	    else if (child > 0)
 	    {
+		
 		child2 = waitpid(child, &status, 0);
-		if (child2 == child)
-		{
-		    this->connectors->set_status(this->connectors->get_status());
-		}
+		
 
-	    }
-	}
+		if (WEXITSTATUS(status) == 2)
+	{
+
+	 this->connectors->set_status(0);
+	 }
+	else 
+	{
+	
+	 this->connectors->set_status(this->connectors->get_status());
+	 }
+
+}
+
+}	
 	
 	int size() {
 	    return 1;
