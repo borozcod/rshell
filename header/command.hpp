@@ -32,6 +32,12 @@ class Command : public Base {
 	
         void execute() {
 
+	    if(this->connectors->get_run()) {
+	    
+		if(this->command_string == "exit" ) {
+		    exit(1);
+		} 	    
+
 	    int status;
 	    char* args[50];
 
@@ -59,8 +65,6 @@ class Command : public Base {
             if (child == 0)
 	    {
 
-	    	if (this->connectors->get_run())
-	    	{
 	  	    for (int i = 0; i < counter; i++)
   	    	    {
      		    args[i] = (char*)(execs.at(i).c_str());
@@ -76,34 +80,29 @@ class Command : public Base {
 				
 	    	    }
 		
-	        } 
-	       else
-	      {
-	
-               exit(1);	  
-	       }
-
 	    }
 	    else if (child > 0)
 	    {
 		
 		child2 = waitpid(child, &status, 0);
 		
+	    	if (WEXITSTATUS(status) == 1)
+	    	{
+	 		this->connectors->set_status(0);
+	    	}
+	    	else 
+	    	{
+	     		this->connectors->set_status(1);
+	    	}
 
-		if (WEXITSTATUS(status) == 2)
-	{
+	   }
+	    }
+	    else
+	    {
+		this->connectors->set_status(this->connectors->get_status());	
+	    }
 
-	 this->connectors->set_status(0);
-	 }
-	else 
-	{
-	
-	 this->connectors->set_status(this->connectors->get_status());
-	 }
-
-}
-
-}	
+	}	
 	
 	int size() {
 	    return 1;

@@ -1,4 +1,10 @@
 #!/bin/sh
 
 BASEDIR=$(dirname $0)
-$BASEDIR/../rshell  "exit"
+COMMAND="echo hi || ls -a && exit ; echo last"
+
+clear
+
+echo "COMMAND TO RUN: ${COMMAND}"
+
+$BASEDIR/../rshell "${COMMAND}"

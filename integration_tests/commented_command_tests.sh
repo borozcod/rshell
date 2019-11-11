@@ -1,4 +1,9 @@
 #!/bin/sh
 
+clear
 BASEDIR=$(dirname $0)
-$BASEDIR/../rshell "echo comment #ls"
+COMMAND="echo comment #ls"
+
+echo "COMMAND TO RUN: ${COMMAND}"
+
+$BASEDIR/../rshell "${COMMAND}"
