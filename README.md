@@ -25,7 +25,7 @@ For this assignment we will be using a Composite Design Pattern. We will have a 
 
 # Diagram
 ## UML
-![Image of UML](https://github.com/cs100/assignment-lakersboyz/blob/borozcod/readme/images/UML-update.jpeg?raw=true)
+![Image of UML](images/UML-update.jpeg?raw=true)
 
 # Classes
 ## `Parser` Class
