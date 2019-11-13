@@ -95,40 +95,26 @@ To test out these function you can run the shell scripts "testParsing.sh" & "sys
 
 # Development and Testing Roadmap
 
-## Create Test
+## Tests
+### Parser Test
+For the parser we had 3 different test
+ - `ParseConnectors`: Here when given a string like `echo hi || ls -a && cat main.cpp || echo bye && echo bye` we tested that the size of the connectors queue was 4 and that the front and back connectors are as expected (represented by 1 or 0). In this test we also ensured that when returning the vector of string commands, they are all in there. For example at the position 4 of the vector we should have `echo bye again`. 
 
-* Create test for `Connectors` class
-    * Test when a connector is added.
-    * Test `set_state()` and make sure the return in `get_sate()` is as expected.
-    * Test `get_run()`
-    * Test `add_connector()`
-* Create test for `Command`
-    * Test a command that should fail.
-    * Test a command that should pass.
-    * Test that it is referencing a `Connectors` class correctly.
-    * Test when a command should not run
-* Create test for `CommandGroup`
-    * Test adding a long string of multiple commands separated by connectors.
-    * Test adding two command groups separated by `;`.
+ - `ParseSingleCommand`: Here we just test that no connectors are added but ensuring that the queue of connectors is indeed 0.
 
-## Create Classes
+ - `ParseCommandGroups`: In this test we split a string like `echo hi ; ls -a || echo hola ; cat main.cpp && echo hello world` into 3 items and then add them to a local vector variable (those vector items on execution will then be parsed once again). Since here we have 3 command groups, we just ensure that the size of the vector is 3.
 
-* Create `Connectors` class
-    * Add `set_status()` function
-    * Add `get_status()` function
-    * Add `get_run()` function
-    * Add `add_connector()` function
-* Create `Command` class
-    * Add `execute()` function
-    * Add constructor
-* Create `CommandGroup` class
-    * Add `add_command()` function
-    * Add `execute()` function
-    * Add constructor
-* Create `Connectors` class
-    * Add `parse()` function that just takes in a string
-    * Add `parse()` function that takes in a string and a vector of strings
-    * Add `get_front()` function
-    * Add `get_back()` function
-    * Add `pop()` function
-    * Add `get_individual_commands()` function
+### Connectors Test
+Since most of the queue logic is inside the parser class. For the connectors test we just run 1 test that simulates what a series of commands separated by connectors.
+
+- `CheckCommandsRun`: If we give the command `echo hi && ls -a || cat main.cpp || echo bye && echo bye again`. The first two commands should run (`echo hi` and `ls -a`) then the following two should not run, then the last `echo bye again` should indeed run. In our test you need to keep in mind that the first command will always run, this is why we start our check with the second one.
+
+### CommandGroup Test
+For the command groups we just make sure that commands are added properly to the vector of Base pointers. This is why I've added a size function that returns the seize of the vector.
+
+- `SingleCommandGroup`: This will just test that a command like `echo hi || ls -a && cat main.cpp || echo bye && echo byeee` will return a size of 5 ( 5 `Commands`);
+
+- `MultipleCommandsGroup`: This will just test that a command group like `echo hi || ls -a && cat main.cpp ; echo bye && echo bye again` will return a size of 2 ( 2 `CommandGroup`);
+
+### Command Test
+Since the single command works because of the integration of all other pice, we test this out inside integrations_test. We tested for single commands, exit command, commented commands and multiple commands. Inside `multiple_commands_tests.sh` I first show what a regular bash would output, then I show what our rshell script outputs. I also save the output from the regular bash to a file.
