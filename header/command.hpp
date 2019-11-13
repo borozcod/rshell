@@ -39,7 +39,7 @@ class Command : public Base {
 		} 	    
 
 	    int status;
-	    char* args[50];
+	    char* args[100];
 
   	    for (int i = 0; i < this->command_string.size(); i++)
   	    {
@@ -73,7 +73,7 @@ class Command : public Base {
 
 	    	    if ( execvp (args[0], args) == -1)
             	    {
-              	    	perror ("exec");
+              	    	perror ("execution failed");
 			this->connectors->set_status(0);
 			
 			exit(2);
