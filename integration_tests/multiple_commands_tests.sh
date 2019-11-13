@@ -1,7 +1,7 @@
 #!/bin/sh
 
 BASEDIR=$(dirname $0)
-COMMAND="echo multiple || ls -a ; cat some_file.txt && echo bye || echo bye2 ; echo lastone"
+COMMAND="echo multiple || ls -a ; cat some_file.txt && echo bye || echo bye2 ; echo last"
 
 clear
 

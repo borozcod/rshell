@@ -73,7 +73,7 @@ class Command : public Base {
 
 	    	    if ( execvp (args[0], args) == -1)
             	    {
-              	    	perror ("execution failed");
+              	    	perror ("RSHELL failed");
 			this->connectors->set_status(0);
 			
 			exit(2);
