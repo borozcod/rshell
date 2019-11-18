@@ -1,9 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 
-clear
 BASEDIR=$(dirname $0)
-COMMAND="echo comment #ls"
+FILE="${BASEDIR}/input_commented_command.txt"
 
-echo "COMMAND TO RUN: ${COMMAND}"
-
-$BASEDIR/../rshell "${COMMAND}"
+$BASEDIR/../rshell < $FILE
