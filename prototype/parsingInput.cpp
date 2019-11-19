@@ -84,6 +84,47 @@ void parsingS(string &enter, int &counter, vector<string> &list, queue<string> &
 
 	else if (enter.at(counter) == '(')
 	{
+
+	int frontP = 1;
+	int backP = 0;
+	int lastPRightSide = 0;
+	int lastPLeftSide = 0;
+
+	for (int i = 1; i < enter.size(); i++)
+	{
+		if (enter.at(i) == '(')
+		{
+		frontP++;
+		lastPLeftSide = i;
+		}
+		else if (enter.at(i) == ')')
+		{
+		backP++;
+		lastPRightSide = i;
+		}
+	}
+
+	if (frontP == backP)
+	{
+	
+	if (frontP > 2 && backP > 2)
+	{
+	enter = enter.substr(counter+1,lastPRightSide-1);
+	int counter2 = 0;
+	
+	while(counter2 < enter.size())
+	{
+	parsingS(enter, counter2, lis, connectors);
+	}
+	lis.push_back(enter);
+
+	}
+
+	
+
+	else
+	{
+
 	for (int i = counter; i < enter.size(); i++)
 	{
 	if (enter.at(i) == ')')
@@ -116,10 +157,18 @@ void parsingS(string &enter, int &counter, vector<string> &list, queue<string> &
 
 	break;
 	}
-	
 	}
+	}
+
+	else
+	{
+	cout << "ERROR: parenthesis don't match" << endl;
+	exit(1);
+	}
+
 	counter = 0;
 	}
+
 	else if (enter.at(counter) == '[' && enter.at(counter+1) == ' ')
 	{
 	for (int i = counter; i < enter.size(); i++)
