@@ -56,7 +56,9 @@ class Parser {
 			
 		int leftParen = 0;
 		int rightParen = 0;
-		
+		int firstParen = counter;
+		int lastParen = 0;
+
 		// will make sure that the parentheses match, ( )
 		for (int i = 0; i < enter.size(); i++)
 		{
@@ -67,6 +69,7 @@ class Parser {
 			else if (enter.at(i) == ')')
 			{
 			rightParen++;
+			lastParen = i;
 			}
 
 		}
@@ -74,6 +77,29 @@ class Parser {
 		// if they do match, then continue
 		if (rightParen == leftParen)
 		{
+	
+		   if (lastParen == enter.size() -1)
+			{
+			lis.push_back(enter.substr(counter, lastParen+1));
+			enter.erase(counter, lastParen+1);
+			}
+		   else if (enter.at(lastParen+2) == '&' && enter.at(lastParen+3) == '&')
+			{
+			lis.push_back(enter.substr(counter,lastParen+1));
+			connectors.push(1);
+			enter.erase(counter,lastParen+5);
+			}
+		  else if (enter.at() == '|' && enter.at() == '|')
+			{
+			lis.push_back(enter.substr(counter, lastParen+1));
+			connectors.push(0);
+			enter.erase(counter,lastParen+5);
+			}
+		
+
+
+/*
+
 			// if nested parentheses
 			if (rightParen > 1 && leftParen > 1)
 			{
@@ -116,6 +142,7 @@ class Parser {
 				}
 			}
 
+*/
 
 		}
 		else
@@ -129,6 +156,9 @@ class Parser {
 
 		else if (enter.at(counter) == '[' && enter.at(counter +1) == ' ')
 		{
+
+
+/*
 	// index of the first letter after either -e, -d, -f
 	int index = counter+2;
 	
@@ -157,6 +187,7 @@ class Parser {
         }
 
         }
+*/
 
 			
 			// will push whatever is after the -e or -f or -d
@@ -168,14 +199,14 @@ class Parser {
 				
 				if(i == enter.size()-1)
                 		{
-                   		 tester.push_back(enter.substr(index,(i-3)-index));
+                   		 lis.push_back(enter.substr(counter,i+1);
 				
                     
                 		}
                 		else if (enter.at(i +2) == '&' && enter.at(i+3) == '&')
                 		{
                     
-                   		 tester.push_back(enter.substr(index,(i-3)-index));
+                   		 lis.push_back(enter.substr(counter,i-1);
 				
 				//connectors.push(1);          			 
          		
@@ -184,7 +215,7 @@ class Parser {
                 		else if (enter.at(i+2) == '|' && enter.at(i+3) == '|')
                 		{
                     
-                    		tester.push_back(enter.substr(index,(i-3)-index));
+                    		lis.push_back(enter.substr(counter, i-1);
                     		
 				//connectors.push(0);
                 		}
@@ -193,7 +224,7 @@ class Parser {
                 		else if (enter.at(i+2) == ';')
                 		{
                     
-                    		tester.push_back(enter.substr(index,(i-2)-index));
+                    		lis.push_back(enter.substr(counter, i-1);
          			
            
                 		}
@@ -222,6 +253,9 @@ class Parser {
 else if ((enter.at(counter) == 't') && (enter.at(counter+1) == 'e') && (enter.at(counter+2) == 's')
              && (enter.at(counter+3) == 't'))
     {
+
+
+/*
 	// index of first letter after -e, -f, -d
 	int index = counter+5;
 
@@ -251,6 +285,7 @@ else if ((enter.at(counter) == 't') && (enter.at(counter+1) == 'e') && (enter.at
 
 	}
 
+*/
 
 
 	// will push whatever is after the -f, -d, -e.
@@ -261,27 +296,27 @@ else if ((enter.at(counter) == 't') && (enter.at(counter+1) == 'e') && (enter.at
 
             if (i == enter.size() -1)
             {
-                tester.push_back(enter.substr(index,(i+1)-index));
+                lis.push_back(enter.substr(counter,(i+1));
                 enter.erase(0,i+1);
                 break;
             }
             else if (enter.at(i) == '&' && enter.at(i+1) == '&')
             {
-                tester.push_back(enter.substr(index,(i-1)-index));
-                enter.erase(0,i+3);
+                lis.push_back(enter.substr(counter,i-1);
+                enter.erase(counter,i+3);
              	//connectors.push(1);
                    break;
             }
             else if(enter.at(i) == '|' && enter.at(i+1) == '|')
             {
-                tester.push_back(enter.substr(index,(i-1)-index));
+                lis.push_back(enter.substr(counter,i-1);
                 enter.erase(0,i+3);
                 //connectors.push(0);
                 break;
             }
             else if (enter.at(i) == ';')
             {
-                tester.push_back(enter.substr(index,(i-1)-index));
+                lis.push_back(enter.substr(counter,i-1);
                 enter.erase(0,i+2);
                 
                 break;
