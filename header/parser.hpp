@@ -3,10 +3,15 @@
 
 #include <queue>
 #include <string>
+#include <vector>
+#include <iostream>
+using namespace std;
 
 class Parser {
         private:
 	    std::queue<int> connectors;
+	    vector<string> tester;
+ 	    vector<string> paren;
 	    std::vector<std::string> single_command_list;
 
 	    void parse_string( std::string &enter, int &counter, std::queue<int> &connectors ) {
@@ -45,6 +50,179 @@ class Parser {
 			connectors.push(0);
 		    }
 		}
+		else if (enter.at(counter) == '(')
+		{
+			
+		int leftParen = 1;
+		int rightParen = 0;
+
+		for (int i = 1; i < enter.size(); i++)
+		{
+			if(enter.at(i) == '(')
+			{
+			leftParen++;
+			}
+			else if (enter.at(i) == ')')
+			{
+			rightParen++;
+			}
+
+		}
+
+		if (rightParen == leftParen)
+		{
+			if (rightParen > 1 && leftParen > 1)
+			{
+			paren.push_back(enter.substr(counter+1, enter.size()-2));
+			enter.erase(0,enter.size());
+			}
+			else
+			{
+			
+			   for (int i = counter; i < enter.size(); i++)
+          			 {
+           				 if (enter.at(i) == ')')
+            					{
+										
+							paren.push_back(enter.substr(counter+1, i -1));
+                    
+                   					 if (i == enter.size() -1)
+                    					{
+                    
+                    					enter.erase(0, i+1);
+                    					}
+                    					else if (enter.at(i+2) == '&' && enter.at(i+3) == '&')
+                    					{
+                        				
+                        				enter.erase(0, i+5);
+							connectors.push(1);
+                    					}
+                    					else if (enter.at(i+2) == '|' && enter.at(i+3) == '|')
+                    					{
+                        				
+                        				enter.erase(0, i+5);
+							connectors.push(0);
+                    					}
+                    					
+
+							break;
+						}
+				}
+			}
+
+
+		}
+		else
+		{
+		cout << "ERROR: parentheses don't match" << endl;
+		}
+		counter = 0;
+		
+	}
+
+		else if (enter.at(counter) == '[' && enter.at(counter +1) == ' ')
+		{
+		
+			for (int i = counter; i < enter.size(); i++)
+			{
+				if (enter.at(i) == ']' && enter.at(i-1) == ' ')
+				{
+				
+				if(i == enter.size()-1)
+                		{
+                   		 tester.push_back(enter.substr(2,i-3));
+			
+                    
+                		}
+                		else if (enter.at(i +2) == '&' && enter.at(i+3) == '&')
+                		{
+                    
+                   		 tester.push_back(enter.substr(2,i-3));
+				
+				connectors.push(1);          			 
+         		
+                		}
+                
+                		else if (enter.at(i+2) == '|' && enter.at(i+3) == '|')
+                		{
+                    
+                    		tester.push_back(enter.substr(2,i-3));
+                    		
+				connectors.push(0);
+                		}
+                
+                
+                		else if (enter.at(i+2) == ';')
+                		{
+                    
+                    		tester.push_back(enter.substr(2,i-2));
+         			
+           
+                		}
+
+                if (i == enter.size()-1)
+                {
+                    enter.erase(0,enter.size()+1);
+                }
+                else if(enter.at(i+2) == ';')
+                {
+                    enter.erase(0, i+4);
+                }
+                else{
+                enter.erase(0, i +5);
+                }
+                
+                break;
+            }
+            
+        }
+        
+        counter = 0;
+    }
+
+
+else if ((enter.at(counter) == 't') && (enter.at(counter+1) == 'e') && (enter.at(counter+2) == 's')
+             && (enter.at(counter+3) == 't') && (enter.at(counter+5) == '-'))
+    {
+	
+        for (int i = 0; i < enter.size(); i++)
+        {
+            if (i == enter.size() -1)
+            {
+                tester.push_back(enter.substr(0,i+1));
+                enter.erase(0,i+1);
+                break;
+            }
+            else if (enter.at(i) == '&' && enter.at(i+1) == '&')
+            {
+                tester.push_back(enter.substr(0,i-1));
+                enter.erase(0,i+3);
+             	connectors.push(1);   
+                break;
+            }
+            else if(enter.at(i) == '|' && enter.at(i+1) == '|')
+            {
+                tester.push_back(enter.substr(0,i-1));
+                enter.erase(0,i+3);
+                connectors.push(0);
+                break;
+            }
+            else if (enter.at(i) == ';')
+            {
+                tester.push_back(enter.substr(0,i-1));
+                enter.erase(0,i+2);
+                
+                break;
+                
+            }
+     
+        }
+        counter = 0;
+    }
+
+
+
+
 		else
 		{
 		    counter++;
