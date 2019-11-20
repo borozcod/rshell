@@ -80,18 +80,18 @@ class Parser {
 	
 		   if (lastParen == enter.size() -1)
 			{
-			lis.push_back(enter.substr(counter, lastParen+1));
+			single_command_list.push_back(enter.substr(counter, lastParen+1));
 			enter.erase(counter, lastParen+1);
 			}
 		   else if (enter.at(lastParen+2) == '&' && enter.at(lastParen+3) == '&')
 			{
-			lis.push_back(enter.substr(counter,lastParen+1));
+			single_command_list.push_back(enter.substr(counter,lastParen+1));
 			connectors.push(1);
 			enter.erase(counter,lastParen+5);
 			}
-		  else if (enter.at() == '|' && enter.at() == '|')
+		  else if (enter.at(lastParen+2) == '|' && enter.at(lastParen+3) == '|')
 			{
-			lis.push_back(enter.substr(counter, lastParen+1));
+			single_command_list.push_back(enter.substr(counter, lastParen+1));
 			connectors.push(0);
 			enter.erase(counter,lastParen+5);
 			}
@@ -199,35 +199,35 @@ class Parser {
 				
 				if(i == enter.size()-1)
                 		{
-                   		 lis.push_back(enter.substr(counter,i+1);
+                   		 single_command_list.push_back(enter.substr(counter,i+1));
 				
                     
                 		}
                 		else if (enter.at(i +2) == '&' && enter.at(i+3) == '&')
                 		{
                     
-                   		 lis.push_back(enter.substr(counter,i-1);
+                   		 single_command_list.push_back(enter.substr(counter,i-1));
 				
-				//connectors.push(1);          			 
+				connectors.push(1);          			 
          		
                 		}
                 
                 		else if (enter.at(i+2) == '|' && enter.at(i+3) == '|')
                 		{
                     
-                    		lis.push_back(enter.substr(counter, i-1);
+                    		single_command_list.push_back(enter.substr(counter, i-1));
                     		
-				//connectors.push(0);
+				connectors.push(0);
                 		}
                 
-                
+  /*              
                 		else if (enter.at(i+2) == ';')
                 		{
                     
-                    		lis.push_back(enter.substr(counter, i-1);
-         			
-           
+                    		single_command_list.push_back(enter.substr(counter, i-1));
+         		
                 		}
+*/
 		// erase what is not needed
                 if (i == enter.size()-1)
                 {
@@ -296,33 +296,34 @@ else if ((enter.at(counter) == 't') && (enter.at(counter+1) == 'e') && (enter.at
 
             if (i == enter.size() -1)
             {
-                lis.push_back(enter.substr(counter,(i+1));
+                single_command_list.push_back(enter.substr(counter,i+1));
                 enter.erase(0,i+1);
                 break;
             }
             else if (enter.at(i) == '&' && enter.at(i+1) == '&')
             {
-                lis.push_back(enter.substr(counter,i-1);
+                single_command_list.push_back(enter.substr(counter,i-1));
                 enter.erase(counter,i+3);
-             	//connectors.push(1);
+             	connectors.push(1);
                    break;
             }
             else if(enter.at(i) == '|' && enter.at(i+1) == '|')
             {
-                lis.push_back(enter.substr(counter,i-1);
+                single_command_list.push_back(enter.substr(counter,i-1));
                 enter.erase(0,i+3);
-                //connectors.push(0);
+                connectors.push(0);
                 break;
             }
+/*
             else if (enter.at(i) == ';')
             {
-                lis.push_back(enter.substr(counter,i-1);
+                single_command_list.push_back(enter.substr(counter,i-1));
                 enter.erase(0,i+2);
                 
                 break;
                 
             }
-     
+ */    
         }
         counter = 0;
     }
