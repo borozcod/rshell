@@ -368,17 +368,38 @@ else if ((enter.at(counter) == 't') && (enter.at(counter+1) == 'e') && (enter.at
  		}
 	    }    
 	 
-
-	string get_paren()
+	void check_command(string command, string &type)
 	{
-	return paren.at(0);
-	}
-	vector<string> get_test()
-	{
-	return tester;
-	}
+		for (int i = 0; i < command.size(); i++)
+		{
+			if (command.at(i) == '-' && command.at(i+1) == 'e')
+			{
+			type = "-e";
+			break;
+			}
+			else if (command.at(i) == '-' && command.at(i+1) == 'f')
+			{
+			type = "-f";
+			break;
+			}
+			else if (command.at(i) == '-' && command.at(i+1) == 'd')
+			{
+			type = "-d";
+			break;
+			}
+			else if (command.at(i) == '(')
+			{
+			type = "paren";
+			break;
+			}
+			else
+			{
+			type = "-e";
+			break;
+			}
+		}	
 
-
+	}
 
    
 	    // Overload for when passing a vector that will hold command gorups
