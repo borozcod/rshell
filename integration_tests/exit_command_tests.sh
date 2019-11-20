@@ -1,10 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 
 BASEDIR=$(dirname $0)
-COMMAND="echo hi || ls -a && exit ; echo last"
+FILE="${BASEDIR}/exit_command.txt"
 
-clear
-
-echo "COMMAND TO RUN: ${COMMAND}"
-
-$BASEDIR/../rshell "${COMMAND}"
+$BASEDIR/../rshell < $FILE
