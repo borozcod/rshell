@@ -50,13 +50,15 @@ class Parser {
 			connectors.push(0);
 		    }
 		}
+
 		else if (enter.at(counter) == '(')
 		{
 			
-		int leftParen = 1;
+		int leftParen = 0;
 		int rightParen = 0;
-
-		for (int i = 1; i < enter.size(); i++)
+		
+		// will make sure that the parentheses match, ( )
+		for (int i = 0; i < enter.size(); i++)
 		{
 			if(enter.at(i) == '(')
 			{
@@ -68,14 +70,17 @@ class Parser {
 			}
 
 		}
-
+	
+		// if they do match, then continue
 		if (rightParen == leftParen)
 		{
+			// if nested parentheses
 			if (rightParen > 1 && leftParen > 1)
 			{
 			paren.push_back(enter.substr(counter+1, enter.size()-2));
 			enter.erase(0,enter.size());
 			}
+			// if not nested
 			else
 			{
 			
@@ -83,9 +88,10 @@ class Parser {
           			 {
            				 if (enter.at(i) == ')')
             					{
-										
+							// will push everything in between the parentheses			
 							paren.push_back(enter.substr(counter+1, i -1));
                     
+							// erase what is not needed anymore
                    					 if (i == enter.size() -1)
                     					{
                     
@@ -114,6 +120,7 @@ class Parser {
 		}
 		else
 		{
+
 		cout << "ERROR: parentheses don't match" << endl;
 		}
 		counter = 0;
@@ -122,7 +129,38 @@ class Parser {
 
 		else if (enter.at(counter) == '[' && enter.at(counter +1) == ' ')
 		{
-		
+	// index of the first letter after either -e, -d, -f
+	int index = counter+2;
+	
+	// will push -e, -f, -d into vector, and change index if needed
+	for (int i = 0; i < enter.size(); i++)
+        {
+	
+        if (enter.at(i) == '-' && enter.at(i+1) == 'e')
+        {
+        tester.push_back("-e");
+        index = i+3;
+        }
+        else if(enter.at(i) == '-' && enter.at(i+1) == 'f')
+        {
+        tester.push_back("-f");
+        index = i+3;
+        }
+        else if (enter.at(i) == '-' && enter.at(i+1) == 'd')
+        {
+        tester.push_back("-d");
+        index = i+3;
+        }
+        else
+        {
+        tester.push_back("-e");
+        }
+
+        }
+
+			
+			// will push whatever is after the -e or -f or -d
+			// and whatever is before ||, &&, ; if they are there
 			for (int i = counter; i < enter.size(); i++)
 			{
 				if (enter.at(i) == ']' && enter.at(i-1) == ' ')
@@ -130,36 +168,36 @@ class Parser {
 				
 				if(i == enter.size()-1)
                 		{
-                   		 tester.push_back(enter.substr(2,i-3));
-			
+                   		 tester.push_back(enter.substr(index,(i-3)-index));
+				
                     
                 		}
                 		else if (enter.at(i +2) == '&' && enter.at(i+3) == '&')
                 		{
                     
-                   		 tester.push_back(enter.substr(2,i-3));
+                   		 tester.push_back(enter.substr(index,(i-3)-index));
 				
-				connectors.push(1);          			 
+				//connectors.push(1);          			 
          		
                 		}
                 
                 		else if (enter.at(i+2) == '|' && enter.at(i+3) == '|')
                 		{
                     
-                    		tester.push_back(enter.substr(2,i-3));
+                    		tester.push_back(enter.substr(index,(i-3)-index));
                     		
-				connectors.push(0);
+				//connectors.push(0);
                 		}
                 
                 
                 		else if (enter.at(i+2) == ';')
                 		{
                     
-                    		tester.push_back(enter.substr(2,i-2));
+                    		tester.push_back(enter.substr(index,(i-2)-index));
          			
            
                 		}
-
+		// erase what is not needed
                 if (i == enter.size()-1)
                 {
                     enter.erase(0,enter.size()+1);
@@ -182,34 +220,68 @@ class Parser {
 
 
 else if ((enter.at(counter) == 't') && (enter.at(counter+1) == 'e') && (enter.at(counter+2) == 's')
-             && (enter.at(counter+3) == 't') && (enter.at(counter+5) == '-'))
+             && (enter.at(counter+3) == 't'))
     {
-	
+	// index of first letter after -e, -f, -d
+	int index = counter+5;
+
+	// push -e, -d, -f, and changed index
+	for (int i = 0; i < enter.size(); i++)
+	{
+
+        if (enter.at(i) == '-' && enter.at(i+1) == 'e')
+        {
+        tester.push_back("-e");
+        index = i+3;
+        }
+        else if(enter.at(i) == '-' && enter.at(i+1) == 'f')
+        {
+        tester.push_back("-f");
+        index = i+3;
+        }
+        else if (enter.at(i) == '-' && enter.at(i+1) == 'd')
+        {
+        tester.push_back("-d");
+        index = i+3;
+        }
+        else
+        {
+        tester.push_back("-e");
+        }	
+
+	}
+
+
+
+	// will push whatever is after the -f, -d, -e.
+	// and before ||, && or ;
+	// then erase
         for (int i = 0; i < enter.size(); i++)
         {
+
             if (i == enter.size() -1)
             {
-                tester.push_back(enter.substr(0,i+1));
+                tester.push_back(enter.substr(index,(i+1)-index));
                 enter.erase(0,i+1);
                 break;
             }
             else if (enter.at(i) == '&' && enter.at(i+1) == '&')
             {
-                tester.push_back(enter.substr(0,i-1));
+                tester.push_back(enter.substr(index,(i-1)-index));
                 enter.erase(0,i+3);
-             	connectors.push(1);   
-                break;
+             	//connectors.push(1);
+                   break;
             }
             else if(enter.at(i) == '|' && enter.at(i+1) == '|')
             {
-                tester.push_back(enter.substr(0,i-1));
+                tester.push_back(enter.substr(index,(i-1)-index));
                 enter.erase(0,i+3);
-                connectors.push(0);
+                //connectors.push(0);
                 break;
             }
             else if (enter.at(i) == ';')
             {
-                tester.push_back(enter.substr(0,i-1));
+                tester.push_back(enter.substr(index,(i-1)-index));
                 enter.erase(0,i+2);
                 
                 break;
@@ -259,7 +331,20 @@ else if ((enter.at(counter) == 't') && (enter.at(counter+1) == 'e') && (enter.at
 		    single_command_list.push_back(command_string);
  		}
 	    }    
-	    
+	 
+
+	string get_paren()
+	{
+	return paren.at(0);
+	}
+	vector<string> get_test()
+	{
+	return tester;
+	}
+
+
+
+   
 	    // Overload for when passing a vector that will hold command gorups
 	    void parse(std::string command_string, std::vector<std::string> &command_g) {
 
