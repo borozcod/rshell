@@ -66,7 +66,7 @@ TEST(ParserTest, ParenthesisTest ) {
 TEST(ParserTest, TestParser ) {
 
     std::string command = "echo hi && ls -a || (echo hola && ls -a || (cat somefile.txt && echo here)) && test -f ./somefile || echo bye";
-    std::string command2 = "echo hi && ls -a || (echo hola && ls -a || (cat somefile.txt && echo here)) && [ -d ./somefile ] || echo bye";
+    std::string command2 = "[ -e test/file/path ] && echo hi && ls -a || (echo hola && ls -a || (cat somefile.txt && echo here)) && [ -d ./somefile ] || echo bye";
 
     // First test
     Parser* parser = new Parser();
@@ -79,14 +79,15 @@ TEST(ParserTest, TestParser ) {
 
     // Size of connectors
     EXPECT_EQ(parser->get_size(), 4);
-    EXPECT_EQ(parser2->get_size(), 4);
+    EXPECT_EQ(parser2->get_size(), 5);
     std::vector<std::string> test_commands = parser->get_individual_commands();
     std::vector<std::string> test_commands2 = parser2->get_individual_commands();
 
 
     EXPECT_EQ(test_commands.at(3), "test -f ./somefile");
     EXPECT_EQ(test_commands2.at(3), "[ -d ./somefile ]");
-    EXPECT_EQ(test_commands2.at(4), "echo bye");
+    EXPECT_EQ(test_commands2.at(0), "[ -e test/file/path ]");
+    EXPECT_EQ(test_commands2.at(5), "echo bye");
 }
 
 TEST(ParserTest, CommandCheck ) {
