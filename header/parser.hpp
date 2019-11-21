@@ -58,6 +58,7 @@ class Parser {
 		int rightParen = 0;
 		int firstParen = counter;
 		int lastParen = 0;
+		bool checker = true;
 
 		// will make sure that the parentheses match, ( )
 		for (int i = 0; i < enter.size(); i++)
@@ -73,11 +74,30 @@ class Parser {
 			}
 
 		}
+
+
+		int n = counter+1;
+		while(enter.at(n) != ')' && enter.size()-1)
+		{
+			if (enter.at(n) == '(')
+			{
+			checker = false;
+			break;
+			}
+			else
+			{
+			checker = true;
+			}
+		n++;
+		}
 	
 		// if they do match, then continue
 		if (rightParen == leftParen)
 		{
 	
+		if (checker == false)
+		{
+
 		   if (lastParen == enter.size() -1)
 			{
 			single_command_list.push_back(enter.substr(counter, lastParen+1));
@@ -95,7 +115,44 @@ class Parser {
 			connectors.push(0);
 			enter.erase(counter,lastParen+5);
 			}
-		
+		}
+		else if (checker == true)
+		{
+
+		   for (int i = counter; i < enter.size(); i++)
+                     {
+                      if (enter.at(i) == ')')
+                      {
+                          
+                          if (i == enter.size() -1)
+                          {
+                              single_command_list.push_back(enter.substr(counter,i+1));
+                              enter.erase(0, i+1);
+                          }
+                          else if (enter.at(i+2) == '&' && enter.at(i+3) == '&')
+                          {
+                              connectors.push(1);
+                              
+                              single_command_list.push_back(enter.substr(counter,i+1));
+                              enter.erase(0, i+5);
+                          }
+                          else if (enter.at(i+2) == '|' && enter.at(i+3) == '|')
+                          {
+                              connectors.push(0);
+                              
+                              single_command_list.push_back(enter.substr(counter, i+1));
+                              enter.erase(0, i+5);
+                          }
+                          
+                          
+                          
+                      }
+                    
+                     }
+
+
+
+		}
 
 
 /*
@@ -147,8 +204,8 @@ class Parser {
 		}
 		else
 		{
-
-		cout << "ERROR: parentheses don't match" << endl;
+			cout << "ERROR: parentheses don't match" << endl;
+			exit(1);
 		}
 		counter = 0;
 		
