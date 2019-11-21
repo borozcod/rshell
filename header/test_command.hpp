@@ -8,12 +8,13 @@
 #include <unistd.h>
 #include "connectors.hpp"
 #include "base.hpp"
+#include "parser.hpp"
 
 class TestCommand : public Base {
     
     std::string	command_string;
     Connectors* connectors;	
-    bool exist;
+    bool exist = true; // default to true
     // This is made possible because of stat.h
     struct stat sb;
 
@@ -27,15 +28,18 @@ class TestCommand : public Base {
 
 	    if(this->connectors->get_run()) {
 	 	
+		std::string command_type;
+		Parser* parser = new Parser();
+		parser->check_command(this->command_string, command_type);
+
 		if (stat(this->command_string.c_str(), &sb) == -1) {
-     		    perror("RSHELL failed");
 		    this->connectors->set_status(0);
-		    exit(2);
+		    this->exist = false;
+		    printf("(False)\n");
+		    return;
 		}
 
-		// Somehow this needs to be dynamic
-		std::string command_type = "-e";
-			
+	    if(exist) {
 		if(command_type == "-e") {
 		    if(  S_ISDIR(sb.st_mode) == 1 || S_ISREG(sb.st_mode) == 1 ) {
 			this->exist = true;
@@ -63,7 +67,8 @@ class TestCommand : public Base {
 		    printf("(False)\n");
 		}
 
-		this->connectors->set_status(1);	
+		this->connectors->set_status(1);
+		}	
 	    }
 	    else
 	    {

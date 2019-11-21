@@ -4,6 +4,7 @@
 #include "base.hpp"
 #include "connectors.hpp"
 #include "command.hpp"
+#include "test_command.hpp"
 #include <vector>
 #include <string>
 #include <iostream>
@@ -57,10 +58,20 @@ class CommandGroup : public Base {
 
 		    std::vector<std::string> individual_commands = individual_parser->get_individual_commands();
 		    for(unsigned i = 0; i < individual_commands.size(); i++) {
-		    	// For the command I pass the CommandGroup's Connectors
-		    	Base* add_command = new Command(this->connectors, individual_commands.at(i));
-		    	// Ran out of ideas for naming things, sorry haha
+		    	
+			std::string type;
+			individual_parser->check_command(individual_commands.at(i), type);
+			
+			Base* add_command;
+			
+			if(type == "test") {
+		    	    add_command = new TestCommand(this->connectors, individual_commands.at(i));
+			} else {
+		    	    add_command = new Command(this->connectors, individual_commands.at(i));
+			}
+
 		    	this->commands.push_back(add_command);
+
 		    }
 		}
 	    }

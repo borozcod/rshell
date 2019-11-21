@@ -63,5 +63,70 @@ TEST(ParserTest, ParenthesisTest ) {
     EXPECT_EQ(test_commands.at(2), "(echo hola && ls -a || (cat somefile.txt && echo here))");
 }
 
+TEST(ParserTest, TestParser ) {
+
+    std::string command = "echo hi && ls -a || (echo hola && ls -a || (cat somefile.txt && echo here)) && test -f ./somefile || echo bye";
+    std::string command2 = "echo hi && ls -a || (echo hola && ls -a || (cat somefile.txt && echo here)) && [ -d ./somefile ] || echo bye";
+
+    // First test
+    Parser* parser = new Parser();
+    parser->parse(command);
+
+    // Second test
+    Parser* parser2 = new Parser();
+    parser2->parse(command2);
+
+
+    // Size of connectors
+    EXPECT_EQ(parser->get_size(), 4);
+    EXPECT_EQ(parser2->get_size(), 4);
+    std::vector<std::string> test_commands = parser->get_individual_commands();
+    std::vector<std::string> test_commands2 = parser2->get_individual_commands();
+
+
+    EXPECT_EQ(test_commands.at(3), "test -f ./somefile");
+    EXPECT_EQ(test_commands2.at(3), "[ -d ./somefile ]");
+    EXPECT_EQ(test_commands2.at(4), "echo bye");
+}
+
+TEST(ParserTest, CommandCheck ) {
+
+    std::string type1;
+    std::string command1 = "(echo hi && (echo in || ls -a))";
+
+    std::string type2;
+    std::string command2 = "test -e ./somefile.txt";
+    
+    std::string type3;
+    std::string command3 = "./somefile.txt";
+
+    std::string type4;
+    std::string command4 = "[ -e ./somefile ]";
+
+
+
+    // First test
+    Parser* parser = new Parser();
+    parser->check_command(command1, type1);
+    parser->check_command(command2, type2);
+    parser->check_command(command3, type3);
+    parser->check_command(command4, type4);
+
+    EXPECT_EQ(command1, "(echo hi && (echo in || ls -a))");
+    EXPECT_EQ(type1, "paren");
+
+    EXPECT_EQ(command2, "-e ./somefile.txt");
+    EXPECT_EQ(type2, "test");
+
+    EXPECT_EQ(command3, "./somefile.txt");
+    EXPECT_EQ(type3, "-e");
+
+    EXPECT_EQ(command4, "-e ./somefile");
+    EXPECT_EQ(type4, "test");
+
+
+}
+
+
 
 #endif //__PARSER_TEST_HPP__
