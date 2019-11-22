@@ -85,7 +85,7 @@ TEST(ParserTest, TestParser ) {
 
 
     EXPECT_EQ(test_commands.at(3), "test -f ./somefile");
-    EXPECT_EQ(test_commands2.at(3), "[ -d ./somefile ]");
+    EXPECT_EQ(test_commands2.at(4), "[ -d ./somefile ]");
     EXPECT_EQ(test_commands2.at(0), "[ -e test/file/path ]");
     EXPECT_EQ(test_commands2.at(5), "echo bye");
 }
