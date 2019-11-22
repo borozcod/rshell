@@ -164,58 +164,45 @@ class Parser {
 		
 	}
 
-		else if (enter.at(counter) == '[' && enter.at(counter +1) == ' ')
-		{
-
-
-
-
-			
-			// will push whatever is after the -e or -f or -d
-			// and whatever is before ||, &&, ; if they are there
-			for (int i = counter; i < enter.size(); i++)
-			{
-				if (enter.at(i) == ']' && enter.at(i-1) == ' ')
-				{
-				
-				if(i == enter.size()-1)
-                		{
-                   		 single_command_list.push_back(enter.substr(counter,i+1));
-				
-                    
-                		}
-                		else if (enter.at(i +2) == '&' && enter.at(i+3) == '&')
-                		{
-                    
-                   		 single_command_list.push_back(enter.substr(counter,i-1));
-				
-				connectors.push(1);          			 
-         		
-                		}
+    else if (enter.at(counter) == '[' && enter.at(counter+1) == ' ')
+    {
+        for (int i = counter; i < enter.size(); i++)
+        {
+            if (enter.at(i) == ']' && enter.at(i -1) == ' ')
+            {
                 
-                		else if (enter.at(i+2) == '|' && enter.at(i+3) == '|')
-                		{
-                    
-                    		single_command_list.push_back(enter.substr(counter, i-1));
-                    		
-				connectors.push(0);
-                		}
                 
- 
-		// erase what is not needed
-                if (i == enter.size()-1)
+               
+                if(i == enter.size()-1)
                 {
-                    enter.erase(0,enter.size()+1);
+                    single_command_list.push_back(enter.substr(counter,i+1));
+                    enter.erase(counter,i+2);
+                    break;
                 }
-                else if(enter.at(i+2) == ';')
+                else if (enter.at(i +2) == '&' && enter.at(i+3) == '&')
                 {
-                    enter.erase(0, i+4);
-                }
-                else{
-                enter.erase(0, i +5);
+                    
+                    single_command_list.push_back(enter.substr(counter,i+1));
+                    enter.erase(counter,i+5);
+                    
+                    connectors.push(1);
+                    
+                    break;
+                    
                 }
                 
-                break;
+                else if (enter.at(i+2) == '|' && enter.at(i+3) == '|')
+                {
+                    
+                    single_command_list.push_back(enter.substr(counter,i+1));
+                    enter.erase(counter,i+5);
+                    
+                    connectors.push(0);
+                    
+                    break;
+                    
+                }
+
             }
             
         }
@@ -223,7 +210,7 @@ class Parser {
         counter = 0;
     }
 
-
+// ------------
 else if ((enter.at(counter) == 't') && (enter.at(counter+1) == 'e') && (enter.at(counter+2) == 's')
              && (enter.at(counter+3) == 't'))
     {
@@ -300,28 +287,46 @@ else if ((enter.at(counter) == 't') && (enter.at(counter+1) == 'e') && (enter.at
  		}
 	    }    
 	 
-	void check_command(string command, string &type)
+	void check_command(string &command, string &type)
 	{
 		for (int i = 0; i < command.size(); i++)
 		{
 			if (command.at(i) == '-' && command.at(i+1) == 'e')
 			{
-			type = "-e";
-			break;
+			    command.erase(0,3);
+			    type = "-e";
+			    break;
 			}
 			else if (command.at(i) == '-' && command.at(i+1) == 'f')
 			{
-			type = "-f";
-			break;
+			    command.erase(0,3);
+			    type = "-f";
+			    break;
 			}
 			else if (command.at(i) == '-' && command.at(i+1) == 'd')
 			{
-			type = "-d";
-			break;
+			    command.erase(0,3); // just remove the flag
+			    type = "-d";
+			    break;
 			}
+			else if (command.at(i) == 't' && command.at(i+1) == 'e' && command.at(i+2) == 's' && command.at(i+3) == 't') 
+			{
+			    command.erase(0,i+5);
+			    type = "test";
+			    break;
+			}
+			else if (command.at(i) == '[') 
+			{
+			    command.erase(0,2);
+			    command.erase(command.find(']') - 1, 3);
+			    
+			    type = "test";
+			    break;
+			}
+
 			else if (command.at(i) == '(')
 			{
-			type = "paren";
+			    type = "paren";
 			break;
 			}
 			else
