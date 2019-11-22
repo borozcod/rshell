@@ -164,6 +164,53 @@ class Parser {
 		
 	}
 
+    else if (enter.at(counter) == '[' && enter.at(counter+1) == ' ')
+    {
+        for (int i = counter; i < enter.size(); i++)
+        {
+            if (enter.at(i) == ']' && enter.at(i -1) == ' ')
+            {
+                
+                
+               
+                if(i == enter.size()-1)
+                {
+                    single_command_list.push_back(enter.substr(counter,i+1));
+                    enter.erase(counter,i+2);
+                    break;
+                }
+                else if (enter.at(i +2) == '&' && enter.at(i+3) == '&')
+                {
+                    
+                    single_command_list.push_back(enter.substr(counter,i+1));
+                    enter.erase(counter,i+5);
+                    
+                    connectors.push(1);
+                    
+                    break;
+                    
+                }
+                
+                else if (enter.at(i+2) == '|' && enter.at(i+3) == '|')
+                {
+                    
+                    single_command_list.push_back(enter.substr(counter,i+1));
+                    enter.erase(counter,i+5);
+                    
+                    connectors.push(0);
+                    
+                    break;
+                    
+                }
+
+            }
+            
+        }
+        
+        counter = 0;
+    }
+
+// ------------
 else if ((enter.at(counter) == 't') && (enter.at(counter+1) == 'e') && (enter.at(counter+2) == 's')
              && (enter.at(counter+3) == 't'))
     {
