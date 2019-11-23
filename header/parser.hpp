@@ -51,116 +51,57 @@ class Parser {
 		    }
 		}
 
-		else if (enter.at(counter) == '(')
-		{
+	else if (enter.at(counter) == '(')
+	{
 			
-		int leftParen = 0;
+		int leftParen = 1;
 		int rightParen = 0;
-		int firstParen = counter;
-		int lastParen = 0;
-		bool checker = true;
-
-		// will make sure that the parentheses match, ( )
-		for (int i = 0; i < enter.size(); i++)
+        	int lastRight = 1;
+		// I count the number of ( and the number of )
+		// Once the number of ( matches the number of ) I know I have the outermost
+		// so I just break out of the loop.
+		for (int i = 1; i < enter.size() + 1; i++)
 		{
-			if(enter.at(i) == '(')
-			{
+		    if(enter.at(i) == '(')
+		    {
 			leftParen++;
-			}
-			else if (enter.at(i) == ')')
-			{
-			rightParen++;
-			lastParen = i;
-			}
+		    }
+		    else if (enter.at(i) == ')')
+		    {
+		    	rightParen++;
+		    }
+            	    lastRight++;
+		
+            	    if(leftParen == rightParen) {
+                	break;
+            	    }
 
 		}
+		
+		// I add that outermost to the vector and erase it from the string
+		single_command_list.push_back(enter.substr(0, lastRight));
+        	enter.erase(0, lastRight);
+		
+		int found_pass = enter.find('&');
+		int found_fail = enter.find('|');
 
-
-		int n = counter+1;
-		while(enter.at(n) != ')' && enter.size()-1)
-		{
-			if (enter.at(n) == '(')
-			{
-			checker = false;
-			break;
-			}
-			else
-			{
-			checker = true;
-			}
-		n++;
-		}
-	
-		// if they do match, then continue
-		if (rightParen == leftParen)
-		{
-	
-		if (checker == false)
-		{
-
-		   if (lastParen == enter.size() -1)
-			{
-			single_command_list.push_back(enter.substr(counter, lastParen+1));
-			enter.erase(counter, lastParen+1);
-			}
-		   else if (enter.at(lastParen+2) == '&' && enter.at(lastParen+3) == '&')
-			{
-			single_command_list.push_back(enter.substr(counter,lastParen+1));
-			connectors.push(1);
-			enter.erase(counter,lastParen+5);
-			}
-		  else if (enter.at(lastParen+2) == '|' && enter.at(lastParen+3) == '|')
-			{
-			single_command_list.push_back(enter.substr(counter, lastParen+1));
-			connectors.push(0);
-			enter.erase(counter,lastParen+5);
-			}
-		}
-		else if (checker == true)
-		{
-
-		   for (int i = counter; i < enter.size(); i++)
-                     {
-                      if (enter.at(i) == ')')
-                      {
-                          
-                          if (i == enter.size() -1)
-                          {
-                              single_command_list.push_back(enter.substr(counter,i+1));
-                              enter.erase(0, i+1);
-                          }
-                          else if (enter.at(i+2) == '&' && enter.at(i+3) == '&')
-                          {
-                              connectors.push(1);
-                              
-                              single_command_list.push_back(enter.substr(counter,i+1));
-                              enter.erase(0, i+5);
-                          }
-                          else if (enter.at(i+2) == '|' && enter.at(i+3) == '|')
-                          {
-                              connectors.push(0);
-                              
-                              single_command_list.push_back(enter.substr(counter, i+1));
-                              enter.erase(0, i+5);
-                          }
-                          
-                          
-                          
-                      }
-                    
-                     }
-
-
-
+		// NOTE (bryan): Here is my aproach on checking if there's a && or an || after the outermost
+		// I didn't want to assume that it was just exactlly one space after the command so insted I use the
+		// find function
+		// If a & is found, found_pass will hold it's index, if not it will be set to -1
+		// I check if there is an & and if it comes before any |
+		// If so I add a connector and erase that & the following one and the space after that
+		//
+		// I do the same for the ||
+		if(found_pass > 0 && found_pass < found_fail) {
+	  	    enter.erase(0, found_pass + 3); // erase the first &, the second & and the space after                      	
+		    connectors.push(1);
+		} else if(found_fail > 0 && found_fail < found_fail) {
+		    enter.erase(0, found_fail + 3); // erase the first |, the second | and the space after	
+	            connectors.push(0);
 		}
 
-		}
-		else
-		{
-			cout << "ERROR: parentheses don't match" << endl;
-			exit(1);
-		}
-		counter = 0;
+        	counter = 0;
 		
 	}
 
