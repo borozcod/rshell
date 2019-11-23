@@ -50,17 +50,19 @@ TEST(ParserTest, ParseCommandGroups ) {
 
 TEST(ParserTest, ParenthesisTest ) {
 
-    std::string command = "echo hi && ls -a || (echo hola && ls -a || (cat somefile.txt && echo here)) && echo bye";
+    std::string command = "echo hi && ls -a || (echo hola && ls -a || (cat somefile.txt && echo here))  && echo bye && ( echo hi || ls -a )";
     Parser* parser = new Parser();
 
     parser->parse(command);
 
     // Size of connectors
-    EXPECT_EQ(parser->get_size(), 3);
+    EXPECT_EQ(parser->get_size(), 4);
 	
     std::vector<std::string> test_commands = parser->get_individual_commands();
     
     EXPECT_EQ(test_commands.at(2), "(echo hola && ls -a || (cat somefile.txt && echo here))");
+    EXPECT_EQ(test_commands.at(3), "echo bye");
+    EXPECT_EQ(test_commands.at(4), "( echo hi || ls -a )");
 }
 
 TEST(ParserTest, TestParser ) {
@@ -127,7 +129,5 @@ TEST(ParserTest, CommandCheck ) {
 
 
 }
-
-
 
 #endif //__PARSER_TEST_HPP__
