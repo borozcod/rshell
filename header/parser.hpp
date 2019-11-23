@@ -15,23 +15,27 @@ class Parser {
 	    std::vector<std::string> single_command_list;
 
 	    void parse_string( std::string &enter, int &counter, std::queue<int> &connectors ) {
-		if (enter.at(counter) == '&' && enter.at(counter + 1) == '&')
+		if (enter.size() >= 2 && enter.at(counter) == '&' && enter.at(counter + 1) == '&')
 		{
+		    
 		    // Check for &&
 		    this->single_command_list.push_back(enter.substr(0, counter -1));
 		    enter.erase(0, counter + 3);
 		    counter = 0;
 		    connectors.push(1);
+		    
 
 		}
-		else if (enter.at(counter) == '|' && enter.at(counter + 1) == '|')
+		else if (enter.size() >= 2 && enter.at(counter) == '|' && enter.at(counter + 1) == '|')
 		{
+
 		    // Check for ||
                     this->single_command_list.push_back(enter.substr(0, counter -1));
 		    enter.erase(0, counter + 3);
 		    counter = 0;
 
 		    connectors.push(0);
+		
 
 		}
 		else if (enter.at(counter) == '#')
@@ -211,7 +215,7 @@ class Parser {
     }
 
 // ------------
-else if ((enter.at(counter) == 't') && (enter.at(counter+1) == 'e') && (enter.at(counter+2) == 's')
+else if (enter.size() >= 4 && (enter.at(counter) == 't' && counter == 0) && (enter.at(counter+1) == 'e') && (enter.at(counter+2) == 's')
              && (enter.at(counter+3) == 't'))
     {
 
@@ -247,9 +251,47 @@ else if ((enter.at(counter) == 't') && (enter.at(counter+1) == 'e') && (enter.at
         counter = 0;
     }
 
+// -----
+
+    else if (enter.size() >= 2 && (toupper(enter.at(counter)) == 'E' && counter == 0) && toupper(enter.at(counter+1)) == 'X' && toupper(enter.at(counter+2)) == 'I' && toupper(enter.at(counter+3)) == 'T')
+    {
+        for (int i = 0; i < enter.size(); i++)
+        {
+            
+        if (i == enter.size()-1)
+        {
+        single_command_list.push_back(enter.substr(counter,4));
+        enter.erase(counter, counter+4);
+            break;
+        }
+            else if (enter.at(i) == '&' && enter.at(i+1) == '&')
+            {
+                single_command_list.push_back(enter.substr(counter,i-1));
+                enter.erase(counter,i+3);
+		connectors.push(1);
+                break;
+                
+            }
+            else if(enter.at(i) == '|' && enter.at(i+1) == '|')
+            {
+                single_command_list.push_back(enter.substr(counter,i-1));
+                enter.erase(counter,i+3);
+		connectors.push(0);
+                break;
+                
+            }
+
+            
+        }
+        counter = 0;
+    }
 
 
 
+
+
+
+// ------
 		else
 		{
 		    counter++;
