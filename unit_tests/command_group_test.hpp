@@ -34,6 +34,19 @@ TEST(CommandGroupTest, MultipleCommandsGroup) {
     EXPECT_EQ(command_group->size(), 2);
 }
 
+TEST(CommandGroupTest, ParenCommandsGroup) {
+
+
+    // Here we add the parenthesis commands    
+    std::string command = "echo hi && ls -a || (echo hola && ls -a || (cat somefile.txt && echo here))";
+
+    Connectors* c = new Connectors();
+    CommandGroup* command_group = new CommandGroup(c, command);
+
+
+    // Just a simple check to ensure commands are being added to the vector member
+    EXPECT_EQ(command_group->size(), 3);
+}
 
 
 #endif //___COMMAND_GROUP_TEST_HPP__

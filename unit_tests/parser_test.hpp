@@ -55,14 +55,32 @@ TEST(ParserTest, ParenthesisTest ) {
 
     parser->parse(command);
 
-    // Size of connectors
+    std::string command2 = "( echo ab && echo cd) || ( echo ef && echo gh) || ( echo lg && echo rh) && echo sfsd";
+    Parser* parser2 = new Parser();
+
+    parser2->parse(command2);
+
+
+   // Size of connectors
+    
     EXPECT_EQ(parser->get_size(), 4);
-	
+
     std::vector<std::string> test_commands = parser->get_individual_commands();
     
     EXPECT_EQ(test_commands.at(2), "(echo hola && ls -a || (cat somefile.txt && echo here))");
     EXPECT_EQ(test_commands.at(3), "echo bye");
     EXPECT_EQ(test_commands.at(4), "( echo hi || ls -a )");
+   
+    // Size of connectors
+    EXPECT_EQ(parser2->get_size(), 3);
+	
+    std::vector<std::string> test_commands2 = parser2->get_individual_commands();
+    
+    EXPECT_EQ(test_commands2.at(0), "( echo ab && echo cd)");
+    EXPECT_EQ(test_commands2.at(1), "( echo ef && echo gh)");
+    EXPECT_EQ(test_commands2.at(2), "( echo lg && echo rh)");
+    EXPECT_EQ(test_commands2.at(3), "echo sfsd");
+
 }
 
 TEST(ParserTest, TestParser ) {

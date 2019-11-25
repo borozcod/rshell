@@ -88,7 +88,6 @@ class Parser {
 		
 		int found_pass = enter.find('&');
 		int found_fail = enter.find('|');
-
 		// NOTE (bryan): Here is my aproach on checking if there's a && or an || after the outermost
 		// I didn't want to assume that it was just exactlly one space after the command so insted I use the
 		// find function
@@ -97,14 +96,15 @@ class Parser {
 		// If so I add a connector and erase that & the following one and the space after that
 		//
 		// I do the same for the ||
-		if(found_pass > 0 && found_pass < found_fail) {
+		// The check for -1 is in the case that the rest of the string just has && or ||
+		if((found_pass > 0 && found_pass < found_fail) || (found_pass > 0 && found_fail == -1)) {
 	  	    enter.erase(0, found_pass + 3); // erase the first &, the second & and the space after                      	
 		    connectors.push(1);
-		} else if(found_fail > 0 && found_fail < found_fail) {
+		} else if((found_fail > 0 && found_fail < found_pass) || (found_fail > 0 && found_pass == -1)) {
 		    enter.erase(0, found_fail + 3); // erase the first |, the second | and the space after	
 	            connectors.push(0);
 		}
-
+	
         	counter = 0;
 		
 	}

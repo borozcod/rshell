@@ -5,6 +5,7 @@
 #include "connectors.hpp"
 #include "command.hpp"
 #include "test_command.hpp"
+#include "parenthesis_command.hpp"
 #include <vector>
 #include <string>
 #include <iostream>
@@ -60,12 +61,15 @@ class CommandGroup : public Base {
 		    for(unsigned i = 0; i < individual_commands.size(); i++) {
 		    	
 			std::string type;
+
 			individual_parser->check_command(individual_commands.at(i), type);
-			
+
 			Base* add_command;
-			
+
 			if(type == "test") {
 		    	    add_command = new TestCommand(this->connectors, individual_commands.at(i));
+			} else if(type == "paren") {
+		    	    add_command = new ParenthesisCommand(this->connectors, individual_commands.at(i));
 			} else {
 		    	    add_command = new Command(this->connectors, individual_commands.at(i));
 			}
