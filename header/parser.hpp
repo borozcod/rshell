@@ -13,8 +13,18 @@ class Parser {
 	    vector<string> tester;
  	    vector<string> paren;
 	    std::vector<std::string> single_command_list;
+	    bool in_quotes = false;
 
 	    void parse_string( std::string &enter, int &counter, std::queue<int> &connectors ) {
+		if(enter.at(counter) == '\"') {
+		    in_quotes = !in_quotes;
+		}
+		
+		if(in_quotes) {
+		    counter++;
+		    return;
+		}
+
 		if (enter.size() >= 2 && enter.at(counter) == '&' && enter.at(counter + 1) == '&')
 		{
 		    
@@ -194,7 +204,7 @@ else if (enter.size() >= 4 && (enter.at(counter) == 't' && counter == 0) && (ent
 
 // -----
 
-    else if (enter.size() >= 2 && (toupper(enter.at(counter)) == 'E' && counter == 0) && toupper(enter.at(counter+1)) == 'X' && toupper(enter.at(counter+2)) == 'I' && toupper(enter.at(counter+3)) == 'T')
+    else if (enter.size() >= 4 && (toupper(enter.at(counter)) == 'E' && counter == 0) && toupper(enter.at(counter+1)) == 'X' && toupper(enter.at(counter+2)) == 'I' && toupper(enter.at(counter+3)) == 'T')
     {
         for (int i = 0; i < enter.size(); i++)
         {

@@ -5,23 +5,24 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
 #include "../header/parser.hpp"
 
 TEST(ParserTest, ParseConnectors ) {
 
-    std::string command = "echo hi || ls -a && cat main.cpp || echo bye && echo bye again";
+    std::string command = "echo hi || ls -a && cat main.cpp || echo bye && echo \"dont && echo run\" || echo this && echo bye again";
     Parser* parser = new Parser();
 
     parser->parse(command);
     EXPECT_EQ(parser->get_front(), 0);
     EXPECT_EQ(parser->get_back(), 1);
-    EXPECT_EQ(parser->get_size(), 4);
+    EXPECT_EQ(parser->get_size(), 6);
     parser->pop();
-    EXPECT_EQ(parser->get_size(), 3);
+    EXPECT_EQ(parser->get_size(), 5);
 	
     std::vector<std::string> test_commands = parser->get_individual_commands();
     
-    EXPECT_EQ(test_commands.at(4), "echo bye again");
+    EXPECT_EQ(test_commands.at(4), "echo \"dont && echo run\"");
 
 
 }
