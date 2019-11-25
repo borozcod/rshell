@@ -1,1 +1,1 @@
-echo start || ls -a && echo bye ; cat somefile.txt && exit || echo bye2 && exit
+echo start || ls -a && echo bye; cat somefile.txt && exit || echo bye2 && exit

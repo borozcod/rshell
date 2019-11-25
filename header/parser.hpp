@@ -252,9 +252,10 @@ else if (enter.size() >= 4 && (enter.at(counter) == 't' && counter == 0) && (ent
 	    void parse_string_commands(std::string &enter, int &counter, std::vector<std::string> &list) {
 		if (enter.at(counter) == ';')
 		{
-		    list.push_back(enter.substr(0, counter -1));
+		    list.push_back(enter.substr(0, counter));
 
 		    enter.erase(0, counter + 2);
+
 		    counter = 0;
 		}
 		else

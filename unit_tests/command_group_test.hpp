@@ -24,7 +24,7 @@ TEST(CommandGroupTest, MultipleCommandsGroup) {
 
     //The difference here is that we add a ;
     // This should actually add everything after the ; as a CommandGroup and therefor reducing the size of the vector to 3
-    std::string command = "echo hi || ls -a && cat main.cpp ; echo bye && echo bye again";
+    std::string command = "echo hi || ls -a && cat main.cpp; echo bye && echo bye again";
 
     Connectors* c = new Connectors();
     CommandGroup* command_group = new CommandGroup(c, command);
