@@ -32,8 +32,14 @@ class ParenthesisCommand : public Base {
 
 	    void execute() {
 		if(this->parent_connectors->get_run()) {
+
 		    for(unsigned i = 0; i < this->commands.size(); i++) {
-		    	commands.at(i)->execute();
+
+		   	if(this->connectors->get_run()) {
+		    	    commands.at(i)->execute();
+		    	} else {
+			    this->connectors->set_status(this->connectors->get_status());
+		    	}
 		    }
 
 		    // I return to the parent the last command status from the group
