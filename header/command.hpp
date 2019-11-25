@@ -39,6 +39,7 @@ class Command : public Base {
 		} 	    
 
 	    int status;
+
 	    char* args[100];
 
   	    for (int i = 0; i < this->command_string.size(); i++)
@@ -51,7 +52,7 @@ class Command : public Base {
           	    i = 0;
           	    counter++;
       		}
-     		else if (i == (this->command_string.size() -1))
+     		if (i == (this->command_string.size() -1))
       	    	{
           	    execs.push_back(this->command_string);
       	    	}
