@@ -349,7 +349,7 @@ else if (enter.size() >= 4 && (enter.at(counter) == 't' && counter == 0) && (ent
 	    void clean(std::string &command) {
 		
 		while(command.at(command.size() - 1) == ' ') {
-		    command.erase(command.size() - 1, command.size());
+		    command.erase(command.size() - 1, 1);
 		}
 
 		while(command.at(0) == ' ') {
