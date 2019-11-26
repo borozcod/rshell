@@ -125,6 +125,9 @@ TEST(ParserTest, CommandCheck ) {
     std::string type4;
     std::string command4 = "[ -e ./somefile ]";
 
+    std::string type5;
+    std::string command5 = "[-e ./somefile]";
+
 
 
     // First test
@@ -133,6 +136,7 @@ TEST(ParserTest, CommandCheck ) {
     parser->check_command(command2, type2);
     parser->check_command(command3, type3);
     parser->check_command(command4, type4);
+    parser->check_command(command5, type5);
 
     EXPECT_EQ(command1, "(echo hi && (echo in || ls -a))");
     EXPECT_EQ(type1, "paren");
@@ -146,7 +150,30 @@ TEST(ParserTest, CommandCheck ) {
     EXPECT_EQ(command4, "-e ./somefile");
     EXPECT_EQ(type4, "test");
 
+    EXPECT_EQ(command5, "-e ./somefile");
+    EXPECT_EQ(type5, "test");
+
 
 }
+
+TEST(ParserTest, CleanString ) {
+
+    std::string command = "   echo clean   ";
+    std::string command2 = "echo clean ";
+    std::string command3 = " echo clean ";
+    std::string command4 = "echo clean";
+
+    Parser* parser = new Parser();
+    parser->clean(command);
+    parser->clean(command2);
+    parser->clean(command3);
+    parser->clean(command4);
+
+    EXPECT_EQ(command, "echo clean");
+    EXPECT_EQ(command2, "echo clean");
+    EXPECT_EQ(command3, "echo clean");
+    EXPECT_EQ(command4, "echo clean");
+}
+
 
 #endif //__PARSER_TEST_HPP__
