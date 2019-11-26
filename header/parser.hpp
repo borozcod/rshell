@@ -312,7 +312,7 @@ else if (enter.size() >= 4 && (enter.at(counter) == 't' && counter == 0) && (ent
 			else if (command.at(i) == '[') 
 			{
 			    command.erase(0,1);
-			    command.erase(command.size() - 1, command.size() );
+			    command.erase(command.size() - 1, 1);
 			    this->clean(command);
 
 			    type = "test";
