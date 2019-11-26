@@ -18,7 +18,7 @@ class ParenthesisCommand : public Base {
 	    ParenthesisCommand(Connectors* c, std::string command) {
 		
 		// Remove the parenthesis on the outside
-		command.erase(0,2);
+		command.erase(0,1);
 		command.erase(command.size() -1);
 
 		this->parent_connectors = c;

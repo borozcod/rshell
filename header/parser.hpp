@@ -311,9 +311,10 @@ else if (enter.size() >= 4 && (enter.at(counter) == 't' && counter == 0) && (ent
 			}
 			else if (command.at(i) == '[') 
 			{
-			    command.erase(0,2);
-			    command.erase(command.find(']') - 1, 3);
-			    
+			    command.erase(0,1);
+			    command.erase(command.size() - 1, 1);
+			    this->clean(command);
+
 			    type = "test";
 			    break;
 			}
@@ -343,6 +344,18 @@ else if (enter.size() >= 4 && (enter.at(counter) == 't' && counter == 0) && (ent
 		    this->parse_string_commands(command_string, counter, command_g);
 		}
 		command_g.push_back(command_string);
+	    }
+
+	    void clean(std::string &command) {
+		
+		while(command.at(command.size() - 1) == ' ') {
+		    command.erase(command.size() - 1, 1);
+		}
+
+		while(command.at(0) == ' ') {
+		    command.erase(0,1);
+		}
+		
 	    }
 
 	    int get_front() {

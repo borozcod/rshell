@@ -5,6 +5,7 @@
 #include <iostream>
 #include "connectors.hpp"
 #include "base.hpp"
+#include "parser.hpp"
 #include <vector>
 #include <unistd.h>
 #include <stdlib.h>
@@ -27,13 +28,15 @@ class Command : public Base {
 	};
 	
 	void add_command(std::string command) {
+	    Parser* parser = new Parser();
+	    parser->clean(command); // Remove extra spaces at the end or begining
 	    this->command_string = command;
 	}
 	
         void execute() {
-
-	    if(this->connectors->get_run()) {
 	    
+	    if(this->connectors->get_run()) {
+
 		if(this->command_string == "exit" ) {
 		    exit(1);
 		} 	    
@@ -41,6 +44,16 @@ class Command : public Base {
 	    int status;
 
 	    char* args[100];
+
+	    int quote = this->command_string.find('"');
+	    int last_quote = this->command_string.find_last_of('"');
+
+	    if(quote > 0 && last_quote > 0) {
+		int space = this->command_string.find(' ');
+		execs.push_back(this->command_string.substr(0, space));
+		execs.push_back(this->command_string.substr(quote + 1, (last_quote - quote) - 1));
+		counter++;
+	    } else {
 
   	    for (int i = 0; i < this->command_string.size(); i++)
   	    {
@@ -58,6 +71,7 @@ class Command : public Base {
       	    	}
 
   	    }
+	    }
 
 
 	    pid_t child = fork();
