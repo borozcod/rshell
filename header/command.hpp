@@ -45,6 +45,16 @@ class Command : public Base {
 
 	    char* args[100];
 
+	    int quote = this->command_string.find('"');
+	    int last_quote = this->command_string.find_last_of('"');
+
+	    if(quote > 0 && last_quote > 0) {
+		int space = this->command_string.find(' ');
+		execs.push_back(this->command_string.substr(0, space));
+		execs.push_back(this->command_string.substr(quote + 1, (last_quote - quote) - 1));
+		counter++;
+	    } else {
+
   	    for (int i = 0; i < this->command_string.size(); i++)
   	    {
       		if (this->command_string.at(i) == ' ')
@@ -61,6 +71,7 @@ class Command : public Base {
       	    	}
 
   	    }
+	    }
 
 
 	    pid_t child = fork();
