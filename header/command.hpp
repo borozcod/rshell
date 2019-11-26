@@ -5,6 +5,7 @@
 #include <iostream>
 #include "connectors.hpp"
 #include "base.hpp"
+#include "parser.hpp"
 #include <vector>
 #include <unistd.h>
 #include <stdlib.h>
@@ -27,13 +28,15 @@ class Command : public Base {
 	};
 	
 	void add_command(std::string command) {
+	    Parser* parser = new Parser();
+	    parser->clean(command); // Remove extra spaces at the end or begining
 	    this->command_string = command;
 	}
 	
         void execute() {
-
-	    if(this->connectors->get_run()) {
 	    
+	    if(this->connectors->get_run()) {
+
 		if(this->command_string == "exit" ) {
 		    exit(1);
 		} 	    
