@@ -155,3 +155,12 @@ For the command groups we just make sure that commands are added properly to the
 
 ### Command Test
 Since the single command works because of the integration of all other pice, we test this out inside integrations_test. We tested for single commands, exit command, commented commands and multiple commands. Inside `multiple_commands_tests.sh` I first show what a regular bash would output, then I show what our rshell script outputs. I also save the output from the regular bash to a file.
+
+### TestCommand Test
+
+`TestCommand`: I just have one test that pretty much just checks if the program is working properly, I added a getter function inside the test command class that just returns true or false if a file or directory exists (depending on the flag used). This is why when we run ./test there's a (True) outputted.
+
+### ParenthesisCommand Test
+
+`ParenthesisCommand`: Since the parenthesis command really just acts as a grouping of regular commands, I just make sure that the commands are added properly to the class's vector member.
+
