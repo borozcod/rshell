@@ -18,7 +18,6 @@ class CommandGroup : public Base {
         public:
 	    CommandGroup(Connectors* c, std::string command) {
 		this->connectors = c;
-		this->connectors->add_connectors(command);
 
 		this->add_command(command);
 	    }	
@@ -40,7 +39,6 @@ class CommandGroup : public Base {
 		// It could be a vector of just one or more
 		parser->parse(command_string, command_g);
 
-		
 		// If there is more than one command group then send that down to a new command group
 		if(command_g.size() > 1) {
 		
@@ -57,6 +55,8 @@ class CommandGroup : public Base {
 		    Parser* individual_parser = new Parser();
 		    individual_parser->parse(command_string);
 
+		    this->connectors->add_connectors(command_string);
+		    
 		    std::vector<std::string> individual_commands = individual_parser->get_individual_commands();
 		    for(unsigned i = 0; i < individual_commands.size(); i++) {
 		    	

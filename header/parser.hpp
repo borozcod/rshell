@@ -76,7 +76,7 @@ class Parser {
 		for (int i = 1; i < enter.size() + 1; i++)
 		{
 		
-		    if(i == enter.size()) {
+		    if(i == enter.size() && leftParen != rightParen) {
 			std::cout << "Missing closing ')'" << std::endl;
 			exit(1);
 		    }
@@ -275,7 +275,6 @@ else if (enter.size() >= 4 && (enter.at(counter) == 't' && counter == 0) && (ent
 	    void parse(std::string command_string) {
 		
 		this->clean(command_string);
-
 		int counter = 0;
 
 		while (counter < command_string.size())
@@ -343,7 +342,7 @@ else if (enter.size() >= 4 && (enter.at(counter) == 't' && counter == 0) && (ent
    
 	    // Overload for when passing a vector that will hold command gorups
 	    void parse(std::string command_string, std::vector<std::string> &command_g) {
-
+		
 		int counter = 0;
 
 		while (counter < command_string.size())
