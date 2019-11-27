@@ -63,11 +63,12 @@ class TestCommand : public Base {
 		
 		if(this->exist) {
 		    printf("(True)\n");
+		    this->connectors->set_status(1);
 		} else {
 		    printf("(False)\n");
+		    this->connectors->set_status(0);
 		}
 
-		this->connectors->set_status(1);
 		}	
 	    }
 	    else

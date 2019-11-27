@@ -72,7 +72,7 @@ class ParenthesisCommand : public Base {
 		   if( type == "paren" ) {
 
 			Connectors* paren_connectors = new Connectors();
-		   	add_command = new ParenthesisCommand(paren_connectors, individual_commands.at(i));
+		   	add_command = new ParenthesisCommand(this->connectors, individual_commands.at(i));
 
 		    } else if ( type == "test" ) {
 			add_command = new TestCommand(this->connectors, individual_commands.at(i));
