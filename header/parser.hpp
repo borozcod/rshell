@@ -67,7 +67,6 @@ class Parser {
 
 	else if (enter.at(counter) == '(')
 	{
-			
 		int leftParen = 1;
 		int rightParen = 0;
         	int lastRight = 1;
@@ -76,6 +75,12 @@ class Parser {
 		// so I just break out of the loop.
 		for (int i = 1; i < enter.size() + 1; i++)
 		{
+		
+		    if(i == enter.size()) {
+			std::cout << "Missing closing ')'" << std::endl;
+			exit(1);
+		    }
+
 		    if(enter.at(i) == '(')
 		    {
 			leftParen++;
