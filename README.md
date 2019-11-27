@@ -25,7 +25,7 @@ For this assignment we will be using a Composite Design Pattern. We will have a 
 
 # Diagram
 ## UML
-![Image of UML](images/UML-update.jpeg?raw=true)
+![Image of UML](images/UML-assignment-3.jpeg?raw=true)
 
 # Classes
 ## `Parser` Class
@@ -66,10 +66,14 @@ echo bye2
 
 All of the other methods from this class are general queue methods, if you look at the implementation of `get_front`, we just defer the functionality to the queue itself. One thing to keep not of is that we have two `parse` functions, one that accepts just a string and another that accepts a vector of strings and modifies it by reference. The idea is that the `CommandGroup` will first check if a string has multiple commands, if so add them to a vector, then we loop through that vector and parse commands and connectors for each one.
 
+Other functions:
+`check_command`: Will return if a command is a test command, a parenthesis command or if a test is `-f`,`-d`,`-e`. If nothing matches it sets the type to `-e`.
+`clean`: Takes in a string and just remove any extra spaces at the beginning or end of a command. We call this function before we execute anything.
+
 
 
 ## `Connectors` Class
-This is the class that will handle if a command should run or not. It will hold a `status` integer that is either 0 or 1, a `run` boolean and a `Parser` pointer for the queue of connectors that are added with `add_connector` which will defer to the parser's `parse` function (with just one parameter). The `set_status` function will take an `int` that is either `1` for pass or `0` for fail, then compare that with the bottom of the queue. Essentially we are comparing the previous result with the following connector. If the next command should run (depending on the connector) we set  `run` to `true` else we set it to `false`. It is this `run` variable that is checked (via `get_run`) before a command is executed.
+This is the class that will handle if a command should run or not. It will hold a `status` integer that is either 0 or 1, a `run` boolean and a `Parser` pointer for the queue of connectors that are added with `add_connector` which will defer to the parser's `parse` function (with just one parameter). The `set_status` function will take an `int` that is either `1` for pass or `0` for fail, then compare that with the bottom of the queue. Essentially we are comparing the previous result with the following connector. If the next command should run (depending on the connector) we set  `run` to `true` else we set it to `false`. It is this `run` variable that is checked (via `get_run`) before a command is executed. The `Connector` class acts as the visitor pattern in which a reference to it is always passed down to every class in our class group.
 
 ## Class Group  
 
@@ -82,7 +86,15 @@ This class will be where the shell command actually gets executed. The execute f
 
 ### `CommandGroup` 
 
-This class will have two private members. A vector of `Command`s and a reference of a `Connector` class. The connector member will be assigned in the constructor. There will be two functions, `execute` and `add_command`. When adding commands, we first check if there are multiple groups of commands (any `;`). We do this by passing a vector string to the Parser's `parse` function, if there are multiple command groups, the parser will add them to the vector. We then check if the vector size is > 1, if so we loop through them and add them as a new `CommandGroup` and create a new `Connector` class for it, then add them to the vector of Base pointers. If the vector is <= 1 then we just parse the command group without the vector parameter, get the list of each individual command (see Parser class definition for reference) and add it as a `Command` to the vector of Base pointers. The `Command` will reference the parent's `Connector` class. The execute function in this class will just loop through the Base pointers and call execute on each of them.
+This class will have two private members. A vector of `Base` pointers and a reference of a `Connector` class. The connector member will be assigned in the constructor. There will be two functions, `execute` and `add_command`. When adding commands, we first check if there are multiple groups of commands (any `;`). We do this by passing a vector string to the Parser's `parse` function, if there are multiple command groups, the parser will add them to the vector. We then check if the vector size is > 1, if so we loop through them and add them as a new `CommandGroup` and create a new `Connector` class for it, then add them to the vector of Base pointers. If the vector is <= 1 then we just parse the command group without the vector parameter, get the list of each individual command (see Parser class definition for reference) and add it as a `Command` to the vector of Base pointers. The `Command` will reference the parent's `Connector` class. The execute function in this class will just loop through the Base pointers and call execute on each of them.
+
+### `ParenthesisCommand`
+This class is very similar to the `CommandGroup` then only major difference is that we take in a reference to the parent's connectors. When we execute the commands inside the parenthesis we return to the parent the status of the last command that was ran. 
+
+### `TestCommand`
+This class in in charge for checking if a file or directory exists. Using the `stat` function and with the `check_command` function in the parser, we test if a file or directory exists. We use the flags, `-f`, `-e`, `-d` and operate accordingly. If no flag is set, `-e` is taken as default.
+
+
 # Prototypes/Research
 
 For our RSHELL we will be using three system calls, fork(), execvp(), and waitpid(). Each one of them have their own unique actions, the fork() system call creates two copies of the process being executed. The processes are the child process and the parent process. The moment when you call fork() is when it splits up, and you can run the same program twice at the same time. Depending on what commands are entered and what connectors are found, we can run two different processes at the same time. However, if we want one process to finish before we start the next one, we can use the system call wait(). Otherwise, if we don’t want to wait and just run the processes at the same time, then we should use the waitpid() system call. It takes in three arguments, which will give us the status information of the terminating process. Then depending on what the return value is, the process can run at the same time. Lastly, the execvp() system call is what is going to enable us to perform the commands that are entered in the input. For example, if the user types in “ls”, the execvp() call will display all the directories.
@@ -97,12 +109,37 @@ To test out these function you can run the shell scripts "testParsing.sh" & "sys
 
 ## Tests
 ### Parser Test
-For the parser we had 3 different test
+For the parser we had 7 different test
  - `ParseConnectors`: Here when given a string like `echo hi || ls -a && cat main.cpp || echo bye && echo bye` we tested that the size of the connectors queue was 4 and that the front and back connectors are as expected (represented by 1 or 0). In this test we also ensured that when returning the vector of string commands, they are all in there. For example at the position 4 of the vector we should have `echo bye again`. 
 
  - `ParseSingleCommand`: Here we just test that no connectors are added but ensuring that the queue of connectors is indeed 0.
 
  - `ParseCommandGroups`: In this test we split a string like `echo hi ; ls -a || echo hola ; cat main.cpp && echo hello world` into 3 items and then add them to a local vector variable (those vector items on execution will then be parsed once again). Since here we have 3 command groups, we just ensure that the size of the vector is 3.
+
+  - `ParenthesisTest`: In this test we make sure that we always get the outermost parenthesis command. Example:
+  ```
+  (echo hola && ls -a || (cat somefile.txt && echo here))  && echo bye && ( echo hi || ls -a )
+  ```
+  Will return a vector with the following items
+   ```
+  (echo hola && ls -a || (cat somefile.txt && echo here))
+  echo bye
+  ( echo hi || ls -a )
+  ```
+  - `TestParser`: Returns the test commands with or without the brakets.
+  ```
+  [ -e test/file/path ] && test -f ./somefile || [ -d ./somefile ] || echo bye
+  ```
+  Will return a vector with the following items
+   ```
+  [ -e test/file/path ]
+  test -f ./somefile
+  [ -d ./somefile ]
+  echo bye
+  ```
+  - `CommandCheck`: We use this test to differentiate what kind of command each one is as well as what kind of file test we would do (`-f`,`-d`, or `-e`).
+
+  - `CleanString`: This test just checks the Parser's `clean` function and makes sure there's no extra spaces before or after a command.
 
 ### Connectors Test
 Since most of the queue logic is inside the parser class. For the connectors test we just run 1 test that simulates what a series of commands separated by connectors.
