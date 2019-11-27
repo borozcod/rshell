@@ -273,6 +273,8 @@ else if (enter.size() >= 4 && (enter.at(counter) == 't' && counter == 0) && (ent
             Parser() {}
 	
 	    void parse(std::string command_string) {
+		
+		this->clean(command_string);
 
 		int counter = 0;
 
