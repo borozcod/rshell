@@ -70,7 +70,8 @@ Other functions:
 `check_command`: Will return if a command is a test command, a parenthesis command or if a test is `-f`,`-d`,`-e`. If nothing matches it sets the type to `-e`.
 `clean`: Takes in a string and just remove any extra spaces at the beginning or end of a command. We call this function before we execute anything.
 
-
+## `RedirectionParser` Class
+Becuase of how the current `Parser` class works, we didn't want to change anyting else in it. We decided to make a copy of the parser class and have it just handdle redirection logic. The class will look through a string and if it finds a `>`,`>>`, or a`|` it will separaed things into a vecor as well as create a queue that represents the corresponding redirectors.
 
 ## `Connectors` Class
 This is the class that will handle if a command should run or not. It will hold a `status` integer that is either 0 or 1, a `run` boolean and a `Parser` pointer for the queue of connectors that are added with `add_connector` which will defer to the parser's `parse` function (with just one parameter). The `set_status` function will take an `int` that is either `1` for pass or `0` for fail, then compare that with the bottom of the queue. Essentially we are comparing the previous result with the following connector. If the next command should run (depending on the connector) we set  `run` to `true` else we set it to `false`. It is this `run` variable that is checked (via `get_run`) before a command is executed. The `Connector` class acts as the visitor pattern in which a reference to it is always passed down to every class in our class group.
@@ -163,4 +164,8 @@ Since the single command works because of the integration of all other pice, we 
 ### ParenthesisCommand Test
 
 `ParenthesisCommand`: Since the parenthesis command really just acts as a grouping of regular commands, I just make sure that the commands are added properly to the class's vector member.
+
+### RedirectionParser
+`RedirectionParserTest`: In this test, we ensure that if a string containes `>`,`>>`, `<` or `|` we ensure that they are added to a vector which we will then use to grab the different components.
+Example: a string like `tr a-z A-Z < file.txt` with the parser will give us `tr a-z A-Z` at possition 0 and `file.txt` at position 1
 
