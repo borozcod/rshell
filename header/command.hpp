@@ -6,11 +6,14 @@
 #include "connectors.hpp"
 #include "base.hpp"
 #include "parser.hpp"
+#include "parser_redirection.hpp"
 #include <vector>
 #include <unistd.h>
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #include <stdio.h>
 
 
@@ -20,6 +23,7 @@ class Command : public Base {
     Connectors* connectors;	
     std::vector<std::string> execs;
     int counter = 1;
+
 
     public:
         Command(Connectors* c, std::string command) { 
@@ -37,9 +41,22 @@ class Command : public Base {
 	    
 	    if(this->connectors->get_run()) {
 
-		if(this->command_string == "exit" ) {
-		    exit(1);
-		} 	    
+	    if(this->command_string == "exit" ) {
+		exit(1);
+  	    }
+
+
+
+	    RedirectionParser* rp = new RedirectionParser();
+	    rp->parse(this->command_string);
+	    vector<std::string> r_commands = rp->get_individual_commands();
+	    std::string file;
+		
+	    if(r_commands.size() > 1) {
+		file = r_commands.at(1);
+		this->command_string = r_commands.at(0);
+	    }
+
 
 	    int status;
 
@@ -86,6 +103,32 @@ class Command : public Base {
  	 	    }
  	 	    args[counter] = NULL;	
 
+		    
+		    int tmpfd_o = dup(1);
+		    int tmpfd_i = dup(0);
+		    int newFile;
+
+		    if(rp->get_front() == 1) {
+
+	                newFile = open(file.c_str(), O_ASYNC | O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+			dup2(newFile, 1);
+	                close(newFile);
+
+		    } else if(rp->get_front() == 2) {
+
+			newFile = open(file.c_str(), O_RDWR | O_APPEND);
+			dup2(newFile, 1);
+	                close(newFile);
+
+		    } else if(rp->get_front() == 3 ) {
+
+			newFile = open(file.c_str(), O_RDONLY);
+			dup2(newFile, 0);
+	                close(newFile);
+
+		    }
+				   	
+
 	    	    if ( execvp (args[0], args) == -1)
             	    {
               	    	perror ("RSHELL failed");
@@ -94,6 +137,14 @@ class Command : public Base {
 			exit(2);
 				
 	    	    }
+
+		 
+		    if(rp->get_front() == 1 || rp->get_front() == 2) {
+			dup2(tmpfd_o, 1);
+		    } else if(rp->get_front() == 3) {
+			dup2(tmpfd_i, 0);
+		    }
+
 		
 	    }
 	    else if (child > 0)
@@ -111,6 +162,9 @@ class Command : public Base {
 	    	}
 
 	   }
+	
+
+
 	    }
 	    else
 	    {
