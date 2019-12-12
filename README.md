@@ -25,7 +25,7 @@ For this assignment we will be using a Composite Design Pattern. We will have a 
 
 # Diagram
 ## UML
-![Image of UML](images/UML-assignment-3.jpeg?raw=true)
+![Image of UML](images/UML-assignment-4.jpeg?raw=true)
 
 # Classes
 ## `Parser` Class
